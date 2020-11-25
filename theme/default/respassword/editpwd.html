@@ -1,0 +1,78 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/slock/slide-unlock-index.css"/>
+<div class="sign-container">
+	<div class="register-start">
+		<span class="sign-tips" id="msgbox" style="">重置成功</span>
+		<form id="regist" class="sign-form" name="registerform">
+			<h1 class="title">重置密码</h1>
+			
+			<div class="item">
+				<label>设置密码</label>
+				<input class="ipt" id="password" type="password" name="password" required autocomplete="off" placeholder="密码" />
+			</div>
+			<div class="item">
+				<label>重复设置密码</label>
+				<input class="ipt" id="passworden" type="password" name="passworden" required autocomplete="off" placeholder="确认密码" />
+			</div>
+			
+			<div class="item">
+				<input id="subadd" class="btn btn-primary btn-block" type="submit" value="确认">
+				
+			</div>
+		</form>
+
+	</div>
+
+	<div class="register-verification" id="info" style="display:none">
+		<div class="auth-form auth-form-text">
+			<h1 id="ht" class="title">重置成功</h1>
+			<p id="hp" class="text-center">您的密码已重置成功！</p>
+		</div>
+	</div>
+</div>
+
+{include file="public/flooter" /}
+
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#regist").serialize();			
+			$.ajax({
+				type: "post",
+				url: "{:URL('/index/respassword/doeditpwd')}",
+				data: str_data,
+				success: function(msg) {
+					if(msg.code==2){
+						
+						$('#msgbox').text('两次密码不相同或密码为空');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.code==3){
+						
+						$('#msgbox').text('数据错误');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.code==5){
+						
+						$('#msgbox').text('链接错误');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.code==1){
+						$('#ht').text('重置成功');
+						$('#hp').text('您的密码已重置成功！');
+						$('#info').attr('style','');
+						$('.register-start').attr('style','display:none');						
+						setTimeout(function () { 
+                            location.href = "{:URL('/index/login')}";
+                        }, 5000);
+					}
+					
+					
+				}
+			});
+			return false;
+		});
+		
+		
+	});
+</script>

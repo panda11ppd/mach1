@@ -1,0 +1,106 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/slock/slide-unlock-index.css"/>
+<div class="sign-container">
+	<div class="register-start">
+		<span class="sign-tips" id="msgbox" style="">密码错误</span>
+		<form id="regist" class="sign-form" name="registerform">
+			<h1 class="title">新用户注册</h1>
+
+			<div class="item">
+				<label>用户名</label>
+				<input class="ipt" id="username" type="text" name="username" required autocomplete="off" placeholder="用户名称" />
+			</div>
+			<div class="item">
+				<label>电子邮箱</label>
+				<input class="ipt" id="emali" type="emali" name="email" required autocomplete="off" placeholder="电子邮箱" />
+			</div>
+			<div class="item">
+				<label>设置密码</label>
+				<input class="ipt" id="password" type="password" name="password" required autocomplete="off" placeholder="密码" />
+			</div>
+			<div class="item">
+				<label>重复设置密码</label>
+				<input class="ipt" id="passworden" type="password" name="passworden" required autocomplete="off" placeholder="确认密码" />
+			</div>
+			<div class="item">
+				<label for="inputPassword"> </label>
+				<input type="hidden" name="vals" id="vals" value="" />
+				<div id="slider">
+					<div id="slider_bg"></div>
+					<span id="label">>></span> <span id="labelTip">拖动滑块验证</span>
+				</div>
+			</div>
+			<div class="item">
+				<input id="subadd" class="btn btn-primary btn-block" type="submit" value="立即注册">
+				<input type="hidden" name="user" value="register">
+			</div>
+		</form>
+
+	</div>
+
+	<div class="register-verification" id="info" style="display:none">
+		<div class="auth-form auth-form-text">
+			<h1 id="ht" class="title">注册成功</h1>
+			<p id="hp" class="text-center">注册成功，您可以在本站登录你的帐号和密码！</p>
+		</div>
+	</div>
+</div>
+
+{include file="public/flooter" /}
+<script src="__PLUG__/slock/jquery.slideunlock.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        var slider = new SliderUnlock("#slider",{
+				successLabelTip : "验证通过"	
+			},function(){
+				$.ajax({   
+                url:'login/vals',   
+                type:'post',   
+                data:'set=val',
+                error:function(){                	
+                },
+                success:function(data){   
+                $('#vals').val(data);
+                var width=$("#slider_bg").width();
+                
+                $("#label").replaceWith('<span id="label" style="left: '+width+'px;"><i style="color: #71B402;" class="fa">&#xe619</span>'); 
+              
+                }
+            });
+            	
+        	});
+        slider.init();
+    })
+</script> 
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#regist").serialize();			
+			$.ajax({
+				type: "post",
+				url: "",
+				data: str_data,
+				success: function(msg) {
+					if(msg.message =='error'){						
+						$('#msgbox').text(msg.content);
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}					
+					if(msg.message =='success'){
+						$('#ht').text('注册成功');
+						$('#hp').text('注册成功，您可以在本站登录你的帐号和密码！');
+						$('#info').attr('style','');
+						$('.register-start').attr('style','display:none');						
+						setTimeout(function () { 
+                            location.href = "{:URL('/index/login')}";
+                        }, 5000);
+					}
+					
+					
+				}
+			});
+			return false;
+		});
+		
+		
+	});
+</script>

@@ -1,0 +1,36 @@
+{include file="public/header" /}
+<div class="tbfocus">
+	<div class="container">
+		<h1>{$sortdb['sort_name']}</h1>
+		<h5>{$sortdb['description']}</h5>
+	</div>
+</div>
+
+<section class="container">
+	<div class="content-wrap">
+		<div class="content">			
+			<div class="excerpts">
+				{volist name="arrys" id="vo"}
+                <article class="excerpt">
+					<a class="focus" href="{$vo.urls}">
+						<img src="{if condition="$vo.thumb_img == null"}__PUBLIC__/static/images/tsimg/{$vo.simgs}{else /}__PUBLIC__{$vo.thumb_img}{/if}" class="thumb" alt="{$vo.title}"></a>
+					<div class="meta">
+						<a class="meta-cat" href="{$vo.menu_url}">{$vo.sort}</a>
+						<time>{$vo.add_time}</time>
+						<span>阅读({$vo.post_num})</span>
+					</div>
+					<h2><a href="{$vo.urls}" title="{$vo.title}">{$vo.title}</a></h2>
+					<div class="note">{$vo.keyword}</div>
+				</article>
+                {/volist}				
+			</div>
+			<div class="pagination">
+				{if condition="($article == true) "}
+				{$article->render()}
+				{/if}
+			</div>
+		</div>
+	</div>
+	{include file="public/aright" /}
+</section>
+{include file="public/flooter" /}

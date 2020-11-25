@@ -1,0 +1,318 @@
+<!--acardindex-->
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/radiocheckbox/css/jquery-labelauty.css" />
+	<style type="text/css">
+		.thumbnail {
+			border: 0px solid #FFFFFF;
+			margin-bottom: 0px;
+		}
+		.dowebok {
+			list-style-type: none;
+			margin-bottom: 0px;
+		}
+		
+		.lis {
+			display: inline-block;
+			margin: 1px 0;
+		}
+		
+		
+		input.labelauty+ label {
+			font: 12px "Microsoft Yahei";
+		}
+	</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>授权卡管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+
+			<form id="list" action="" method="post">
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">应用选项</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							{volist name="appdb" id="vo"}
+							<li class="lis"><input type="radio" name="appid" value="{$vo.appid}" data-labelauty="{$vo.app_name}"></li>
+							{/volist}
+
+							<!--<li class="lis"><input type="radio" name="radio" disabled data-labelauty="不可用"></li>-->
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">可用状态</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							<li class="lis"><input type="radio" name="status" value="1" data-labelauty="启用"></li>
+							<li class="lis"><input type="radio" name="status" value="0" data-labelauty="停用"></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">销售状态</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							<li class="lis"><input type="radio" name="sales_status" value="0" data-labelauty="未出售"></li>
+							<li class="lis"><input type="radio" name="sales_status" value="1" data-labelauty="已出售"></li>
+							<li class="lis"><input type="radio" name="sales_status" value="2" data-labelauty="已使用"></li>
+						</ul>
+					</div>
+				</div>	
+			</form>			
+		</div>
+		<div class="divs">
+			<div id="toolbar">
+				<button type="button" id="dellist" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>删除</button>
+				<a role="button" href="{:URL('/admin/acard/add')}" type="button" class="btn btn-primary">生成授权卡</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="acardtable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+<script src="__PLUG__/radiocheckbox/js/jquery-labelauty.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+	   $(':input').labelauty();	   
+   });
+</script>
+
+<script type="text/javascript">
+    var $table = $('#acardtable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/acard/acardlist',
+			queryParamsType: '',
+			queryParams: getdata,
+			columns: [
+			{
+				checkbox:true,				
+				align: 'center'
+			},{
+				field: 'id',
+				title: 'ID',
+				align: 'center'
+			}, {
+				field: 'acard_number',
+				title: '授权号',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'user',
+				title: '用户',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_name',
+				title: '所属应用',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'create_time',
+				title: '创建时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sales_time',
+				title: '销售时间',				
+				align: 'center'
+			},{
+				field: 'expire_time',
+				title: '到期时间',				
+				align: 'center'
+			},{
+				field: 'logintime',
+				title: '上次登录时间',
+				visible: false,
+				editable: true,
+				align: 'center'
+			},{
+				field: 'logincount',
+				title: '登录次数',
+				editable: true,
+				visible: false,
+				align: 'center'
+			}, {
+				field: 'sales_status',
+				title: '销售状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+			exportDataType:'selected'
+		});
+        function getdata(params){        	
+        	var data = {};
+            $("#list").serializeArray().map(function(x){
+	            if (data[x.name] !== undefined) {
+                    if (!data[x.name].push) {
+                        data[x.name] = [data[x.name]];
+                    }
+                    data[x.name].push(x.value || '');
+                } else {
+                    data[x.name] = x.value || '';
+                }
+            });
+            
+        	var temp = {
+        		limit: params.pageSize,
+                offset: params.pageNumber,
+                search: params.searchText,
+                appid:data.appid,
+                status:data.status,
+                sales_status:data.sales_status,
+        	};
+        	return temp;
+        }
+		function oper(value, row, index) {			
+			
+			var id = row.id;
+			var status=row.status;
+			var acard=row.acard_number;
+			var opdata = '<a href="__ROOT__/admin/acard/edit?id=' + id +'&acard=' + acard + '" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon"><i class="fa fa-cog"></i></a>';
+			    if (status=='<span style="color:#009900">启用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="acardset(\'stop\',\'' + id + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } 
+			    if(status=='<span style="color:#666666">停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="acardset(\'start\',\'' + id + '\')"><i class="fa fa-toggle-off"></i></div>';
+			    }
+			    
+				opdata += '<div style="margin-right: 5px" type="button" title="del" class="btn btn-xs btn-del" onclick="acardset(\'del\',\'' + id + '\',\'' + acard + '\')"><i class="fa fa-trash"></i></div>';			    	
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+    
+	function acardset(sets,id,acard) {
+		var $table = $('#acardtable');
+		if(sets=='stop' || sets=='start'){						
+			$.post("__ROOT__/admin/acard/set", {
+				acardset: sets,
+				id: id,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除名称为 '+acard+'授权卡?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	delacard(id,acard);           
+            }, function(){           	
+            });
+		}	
+					
+	}
+	$(document).ready(function() {
+		$('.lis').change(function() {
+			var act=$table.bootstrapTable('getSelections');	
+			$table.bootstrapTable('refresh', {silent: true});
+		});
+	});
+	$("#dellist").click(function(){
+        var act=$table.bootstrapTable('getSelections');
+        if(act==false){
+       	  layer.msg('请选择要删除的列表'); 
+        }else{
+        	layer.confirm('是否批量删除选中项？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                dellist(act);
+            }, function(){
+                
+            });       	
+        }           
+    });
+    function dellist(act){
+    	$.post("__ROOT__/admin/acard/set", {
+			acardset: 'dellist',
+			data: act,
+		}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+    }
+    function delacard(id,acard){
+		var $table = $('#acardtable');
+		$.post("__ROOT__/admin/acard/set", {
+			acardset:'del',
+			acard: acard,
+			id: id,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

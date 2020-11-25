@@ -1,0 +1,21 @@
+.fixed-table-container tbody td {
+    border-left: 0px solid #dddddd;
+}
+.fixed-table-container thead th {
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border-left: 0px solid #dddddd;
+}
+.bootstrap-table .table {
+    margin-bottom: 0 !important;
+    border-bottom: 0px solid #dddddd;
+    border-collapse: collapse !important;
+    border-radius: 0px;
+}
+.fixed-table-container {
+    -webkit-border-radius: 0px;
+    border: 0px solid #dddddd  !important; 
+    border-bottom: 1px solid #dddddd  !important; 
+}
+

@@ -1,0 +1,60 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrapvalidator/css/bootstrapValidator.min.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>网站设置</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="col-sm-6">
+			<div class="page-header page-s">
+				<h1>评论设置<small></small></h1>
+			</div>
+			<form id="form" class="form-horizontal" action="" method="post">
+				
+				<div class="form-group">
+					<label for="inputnetonoff" class="col-sm-2 col-md-2 col-lg-1 control-label">评论开关</label>
+					<div class="col-sm-8">
+						<label class="radio-inline">
+                        <input type="radio" name="status" id="inlineneton" value="1" {if condition="$comment['status'] == 1"}checked{/if}> 开
+                    </label>
+						<label class="radio-inline">
+                        <input type="radio" name="status" id="inlinenetoff" value="0" {if condition="$comment['status'] == 0"}checked{/if}> 关
+                    </label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">多说名</label>
+					<div class="col-sm-6 col-md-3 col-lg-1">
+						<input type="text" name="name" class="form-control" placeholder="多说名" value="{$comment['name']}" />
+					</div><small>.duoshuo.com&nbsp;&nbsp;</small>
+					<label style="color: red;" for="inputnetname" class="control-label">请到多说官网申请多说评论账号-><a target="_blank" href="http://duoshuo.com//">进入</a></label>
+				</div>				
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-sm-8 col-md-5 col-lg-3">
+						<button id="sub" type="submit" style="width: 80px;height: 40px;" class="btn btn-primary">保&nbsp;存</button>
+					</div>
+				</div>
+				
+			</form>
+
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+
+<script type="text/javascript">
+$(function(){
+	$('#sub').click(function(){	
+	    var str_data = $("#form").serialize();        
+        $.ajax({   	
+		    type: "POST",
+		    url: "",
+		    data: str_data,
+		    success: function(msg) {			
+			    layer.msg(msg);
+		    }
+	    });
+	    return false;	
+   });	
+});
+</script>

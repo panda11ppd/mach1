@@ -1,0 +1,152 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>代理认证</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<button id="alladd" class="btn btn-primary">批量通过</button>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="apptable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+{js href="__PLUG__/layer/layer.js" /}
+
+
+<script type="text/javascript">
+    var $table = $('#apptable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+//			search: true,
+		searchOnEnterKey: true,
+//			showColumns: true,
+//			showRefresh: true,
+//			showToggle: true,
+//			showPaginationSwitch: true,
+			idField: 'appid',
+			showexport: true,
+			uniqueId: 'appid',
+     		toolbar: '#toolbar',
+//			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/agents/wait',
+			columns: [
+			{
+				checkbox:true,				
+				align: 'center'
+			},{
+				field: 'id',
+				title: 'ID',
+				visible:false,
+				align: 'center'
+			},{
+				field: 'uid',
+				title: 'UID',
+				align: 'center'
+			},{
+				field: 'name',
+				title: '用户名',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'score',
+				title: '积分值',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'goods_name',
+				title: '申请代理商品',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'add_time',
+				title: '申请时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {
+			var id = row.id;
+		
+			var opdata = '<button style="margin-right: 5px" type="button" title="激活" class="btn btn-xs btn-primary" onclick="app(\'add\',\'' + id + '\')">通过</button>';	
+				opdata += '<button style="margin-right: 5px" type="button" title="激活" class="btn btn-xs btn-danger" onclick="app(\'del\',\'' + id + '\')">删除</button>';		  				
+			return opdata;
+		}
+		
+	});
+    function app(sets,id){   	   	 		
+    	    $.get('{:URL("/admin/agents/waitset")}', {
+			    aset: sets,
+			    aid: id,
+		    }, function(response) {
+			    if (response) {					
+				    layer.msg(response);
+				    retable();
+			    } else {
+                    layer.msg('操作失败！请重试！');					
+			    }
+		    });
+		
+	} 
+    
+    function retable(){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+    
+    $("#alladd").click(function(){
+        var act=$table.bootstrapTable('getSelections');
+        if(act==false){
+       	  layer.msg('请选择要删除的列表'); 
+        }else{
+        	layer.confirm('是否批量删除选中项？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                allagent(act);
+            }, function(){
+                
+            });
+       	
+        }
+       
+      
+    });
+    function allagent(act){
+    	$.get("__ROOT__/admin/agents/waitset", {
+			aset: 'alladd',
+			data: act,
+		}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+    }
+</script>
+

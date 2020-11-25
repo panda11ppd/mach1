@@ -1,0 +1,42 @@
+{include file="public/header" /}
+
+<div class="container">
+    <div class="themes-wrap">
+    <div class="themes-box">
+    	{volist name="goods" id="vo"}
+    	<div class="themes-item">
+            <header style="{$vo.bgcode}">
+                <h2>{$vo.title}</h2>
+                <h4>{$vo.stitle}</h4>
+            </header>
+            <div class="themes-item-content">
+                <a target="_blank" href="{:URL('/index/goods')}?id={$vo.goods_id}">
+                	{if condition="$vo.expimg eq ''"}
+                	<img src="__PUBLIC__/static/images/noimg.png">
+                    {else /}
+                    <img src="__PUBLIC__{$vo.expimg}">
+                    {/if}
+                    
+                </a>
+            </div>
+            <footer>
+            	<a target="_blank" href="{:URL('/index/goods/index','id='.$vo.goods_id)}" class="btn btn-primary">专题介绍</a>
+            	{if condition="$vo.down_url eq ''"}
+                	<a target="_blank" href="#" class="btn btn-default disabled"  disabled="disabled">暂无下载</a>
+                    {else /}
+                    <a target="_blank" href="{$vo.down_url}" class="btn btn-default">下载APP</a>
+                {/if}
+                
+                
+            </footer>
+        </div>
+    	
+        {/volist}
+
+    </div>
+    </div>
+
+</div>
+
+
+{include file="public/flooter" /}

@@ -1,0 +1,270 @@
+<!--acardindex-->
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/jquery-ui1.121/jquery-ui.min.css"/>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>菜单管理</span>
+	</div>
+	<style>
+		.leftMenu .panel-heading {
+			position: relative;
+			cursor: pointer;
+		}
+		
+		.clickfa {
+			position: relative;
+			cursor: pointer;
+		}
+		
+		.sorttab {
+			cursor: move;
+		}
+		
+		.bord-r {
+			margin-top: 0px !important;
+			border-radius: 0px !important;
+		}
+		
+		.bord-r2 {
+			margin-top: 5px !important;
+			margin-bottom: 5px !important;
+			border-radius: 0px !important;
+		}
+		
+		.bu {
+			border-top: 1px solid #DDDDDD;
+		}
+	</style>
+	<box class="box-b">
+		<div class="divs col-lg-4">
+			<div class="panel-group table-responsive" role="tablist">
+				<div class="bord-r panel panel-default leftMenu">
+					<!-- 利用data-target指定要折叠的分组列表 -->
+					<div class="panel-heading click" id="sys" data-toggle="collapse" data-target="#sysindex" role="tab">
+						<h4 class="panel-title">页面
+                                <i class="fa fa-caret-up pull-right"></i>
+                            </h4>
+					</div>
+					<!-- .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 -->
+					<div id="sysindex" class="bu panel-collapse collapse in" role="tabpanel" aria-labelledby="sys">
+						<div style="margin:10px 20px;">
+							<form id="pags" class="form-horizontal" action="" method="get">
+								<input type="hidden" name="type" value="pags" />
+								<div class="checkbox">
+									<label><input class="cbox" type="checkbox" name="name[]" value="home" />首页</label>
+								</div>
+								<div class="checkbox">
+									<label><input class="cbox" type="checkbox" name="name[]" value="appstore" />应用商店</label>
+								</div>
+								<div class="checkbox">
+									<label><input class="cbox" type="checkbox" name="name[]" value="allarticle" />所有文章</label>
+								</div>
+								<button style="margin-top:20px;" id="subpags" type="submit" class="btn btn-default">添加到菜单</button>
+							</form>
+						</div>
+
+					</div>
+				</div>
+				<!--panel end-->
+				<div class="bord-r panel panel-default leftMenu">
+					<div class="panel-heading click" id="article" data-toggle="collapse" data-target="#articleindex" role="tab">
+						<h4 class="panel-title">文章分类
+                                <i class="fa fa-caret-down pull-right"></i>
+                            </h4>
+					</div>
+					<div id="articleindex" class="bu panel-collapse collapse" role="tabpanel" aria-labelledby="article">
+						<div style="margin:10px 20px;">
+							<form id="articles" class="form-horizontal" action="" method="get">
+								<input type="hidden" name="type" value="article" />
+								{volist name="sortdb" id="vo"}
+								<div class="checkbox">
+									<label><input class="cbox" type="checkbox" name="id[]" value="{$vo.id}" />{$vo.sort_name}</label>
+								</div>
+								{/volist}
+
+								<button style="margin-top:20px;" id="subarticle" class="btn btn-default">添加到菜单</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="bord-r panel panel-default leftMenu">
+					<div class="panel-heading click" id="definde" data-toggle="collapse" data-target="#defindeindex" role="tab">
+						<h4 class="panel-title">自定链接
+                                <i class="fa fa-caret-down pull-right"></i>
+                            </h4>
+					</div>
+					<div id="defindeindex" class="bu panel-collapse collapse" role="tabpanel" aria-labelledby="definde">
+						<div style="margin:10px 20px;">
+							<form id="definelink" class="form-horizontal" action="" method="get">
+								<input type="hidden" name="type" value="definelink" />
+								<div class="form-group">
+									<label for="url" class="col-sm-3 control-label text-w">URL</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="menu_url" placeholder="url地址" value="">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="name" class="col-sm-3 control-label text-w">链接名称</label>
+									<div class="col-sm-9">
+										<input type="text" name="name" value="" class="form-control" placeholder="链接名称">
+									</div>
+								</div>
+								<button style="margin-top:20px;" id="subdefinelink" type="submit" class="sub btn btn-default">添加到菜单</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="divs col-lg-7">
+			<form id="savemenu" role="form" action="" method="post">
+				<div class="panel panel-default bord-r">
+					<div class="panel-heading">
+						<h3 class="panel-title">菜单<button class="save btn btn-primary btn-xs pull-right">保存</button></h3>
+					</div>
+					<div class="sort panel-body">
+						<h4>菜单栏目</h4>
+						<p>可从左侧添加项目，上下拖动可排序!</p>
+						<div id="menus" class="panel-group table-responsive" role="tablist">
+							{volist name="menulist" id="vo"}
+							<div id="is{$vo.id}" class="bord-r2 panel panel-default sorttab">
+								<div class="panel-heading">
+									<h4 class="panel-title">{$vo.name}<i class="clickfa fa fa-caret-down pull-right" id="val{$vo.id}" data-toggle="collapse" data-target="#page{$vo.id}" role="tab"></i></h4>
+								</div>
+								<div id="page{$vo.id}" class="bu panel-collapse collapse" role="tabpanel" aria-labelledby="val{$vo.id}">
+									<div style="margin:10px 20px;">
+										<div class="form-group"><label>名称</label><input type="text" name="name[]" class="form-control" placeholder="名称" value="{$vo.name}"></div>
+										<div class="form-group"><label>URL</label><input type="text" name="menu_url[]" class="form-control" placeholder="URL" value="{$vo.menu_url}"></div>
+										<div class="form-group"><button type="button" class="btn btn-danger" onclick="delmenu({$vo.id})">移除</button></div>
+									</div>
+								</div>
+							</div>
+							{/volist}
+
+						</div>
+					</div>
+					<div class="panel-footer">
+						<h3 class="panel-title">菜单<button class="save btn btn-primary btn-xs pull-right">保存</button></h3>
+					</div>
+
+				</div>
+			</form>
+		</div>
+
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+{include file="public/flooter" /} {js href="__PLUG__/bootstrap-table/bootstrap-table.js" /} {js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+<script src="__PLUG__/jquery-ui1.121/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function(){
+        $(".click").click(function(e){
+            /*切换折叠指示图标*/
+            $(this).find("i").toggleClass("fa fa-caret-down");
+            $(this).find("i").toggleClass("fa fa-caret-up");
+        });
+    });
+    $(function(){
+        $(".clickfa").click(function(e){
+            /*切换折叠指示图标*/
+            $(this).toggleClass("fa fa-caret-down");
+            $(this).toggleClass("fa fa-caret-up");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {    	
+		$('#subpags').click(function() {
+			var str_data = $("#pags").serialize();			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/menu/getlink')}",
+				data: str_data,
+				success: function(data) {
+					$(data).each(function(index){
+						addmenu(this.name,this.menu_url);                       
+                    });
+				}
+			});
+			return false;
+		});
+		$('#subarticle').click(function() {
+			var str_data = $("#articles").serialize();
+			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/menu/getlink')}",
+				data: str_data,
+				success: function(data) {
+					$(data).each(function(index){
+						addmenu(this.name,this.menu_url);                       
+                    });
+				}
+			});
+			return false;
+		});
+		$('#subdefinelink').click(function() {
+			var str_data = $("#definelink").serialize();
+			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/menu/getlink')}",
+				data: str_data,
+				success: function(data) {
+					$(data).each(function(index){
+						addmenu(this.name,this.menu_url);                       
+                    });
+				}
+			});
+			return false;
+		});
+		$('.save').click(function() {
+			var str_data = $("#savemenu").serialize();
+			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/menu/savemenu')}",
+				data: str_data,
+				success: function(data) {
+					layer.msg(data);
+				}
+			});
+			return false;
+		});	
+	});
+	function addmenu(name,menu_url){
+		var le= $('#menus .bord-r2').length;
+			le=le+1;			
+		var vals='<div id="is'+le+'" class="bord-r2 panel panel-default sorttab"><div class="panel-heading">';			
+		vals+='<h4 class="panel-title">'+name+'<i class="clickfa fa fa-caret-down pull-right" id="val'+le+'" data-toggle="collapse" data-target="#page'+le+'" role="tab"></i></h4>';
+		vals+='</div><div id="page'+le+'" class="bu panel-collapse collapse" role="tabpanel" aria-labelledby="val'+le+'"><div style="margin:10px 20px;">';	
+		vals+='<div class="form-group"><label>名称</label><input type="text" name="name[]" class="form-control" placeholder="名称" value="'+name+'"></div>';
+		vals+='<div class="form-group"><label>URL</label><input type="text" name="menu_url[]" class="form-control" placeholder="URL" value="'+menu_url+'"></div>';
+		vals+='<div class="form-group"><button type="button" class="btn btn-danger" onclick="delmenu('+le+')">移除</button></div>';
+        vals+='</div></div></div>';
+		$("#menus").append(vals);
+		$(".cbox").attr("checked",false);
+	}
+    
+</script>
+<script type="text/javascript">
+ function delmenu(le){
+ 	var dex='#is'+le;
+	$(dex).remove();
+ }
+</script>
+<script type="text/javascript">
+	$(function() {
+        $(".sort").sortable({
+        	revert: true,
+            cursor: "move",
+            items: ".sorttab", //只是tr可以拖动
+            opacity: 0.9, //拖动时，透明度为0.6
+            revert: true, //释放时，增加动画        
+    });
+    $(".sortable").disableSelection();
+});
+</script>

@@ -1,0 +1,72 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/plug/aliico/iconfont.css"/>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">添加用户</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h1>生成授权码<small></small></h1>
+			</div>
+			<form id="acard" class="form-horizontal">
+				<input type="hidden" name="set" value="create" />
+				<div class="form-group">
+					<label for="inputpwd" class="col-sm-3 col-md-3 col-lg-2 control-label">授权码应用</label>
+					<div class="col-sm-5 col-md-5 col-lg-3">
+						<select class="form-control" name="appid">
+							{volist name="resapp" id="vo"}
+							<option value="{$vo.appid}">{$vo.app_name}</option>                           
+                            {/volist}							
+						</select>
+					</div>
+					<a href="{:URL('/admin/app/add')}" class="btn btn-link">添加应用</a>
+				</div>
+				<div class="form-group">
+					<label for="inputnumber" class="col-sm-3 col-md-3 col-lg-2 control-label">数量</label>
+					<div class="col-sm-5 col-md-5 col-lg-3">
+						<input type="text" name="number" class="form-control" placeholder="生成数量" value="" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*一次最大100张</label>
+				</div>
+				
+				<div class="form-group">
+					<label for="inputpwd" class="col-sm-3 col-md-3 col-lg-2 control-label">绑定方式</label>
+					<div class="col-sm-5 col-md-5 col-lg-3">
+						<select class="form-control" name="bind">
+							<option value="0" selected>不绑定</option>
+							<option value="1">绑定IP</option>
+							<option value="2">绑定机器码</option>
+							<option value="3">绑定IP与机器码</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-5 col-md-5 col-lg-3">						
+						<a class="btn btn-warning" href="{:URL('/admin/acard')}" role="button">返回</a>
+						<button id="subadd" class="btn btn-primary">确认生成</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#acard").serialize();	
+			$.ajax({
+				type: "get",
+				url: "",
+				data: str_data,
+				success: function(msg) {
+					layer.alert(msg);					
+				}
+			});
+			return false;
+		});
+		
+	});
+</script>
+

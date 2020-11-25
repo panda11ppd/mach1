@@ -1,0 +1,20 @@
+<div class="member-nav">
+		<div class="usermenus">	
+			<ul class="usermenu">
+				{volist name="menu1" id="mo"}
+		            <li {if condition="$menuname eq $mo.name"}class="active"{/if}><a href="{:url($mo.url)}">{$mo.name}</a></li>                          
+                {/volist}
+				
+			</ul>
+			
+			<ul class="usermenu">
+				<li><a href="{:url('/index/record')}">积分记录</a></li>
+				{volist name="menu2" id="ma"}
+		            <li {if condition="$menuname eq $ma.name"}class="active"{/if}><a href="{:url($ma.url)}">{$ma.name}</a></li>                          
+                {/volist}
+			</ul>
+			<ul class="usermenu">
+				<li><a href="{:URL('/index/login/quit')}">注销</a></li>
+			</ul>
+		</div>
+	</div>

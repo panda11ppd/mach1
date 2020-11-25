@@ -1,0 +1,29 @@
+{include file="public/header" title="$title" keywords="$article.keyword" description="$article.description" /}
+<section class="container">
+	<div class="content-wrap">
+		<div class="content">
+			<div class="article-container">
+				<header class="article-header">
+					<h1 class="article-title">{$article['title']}</h1>
+					<div class="article-meta">
+						<span class="item">{$article['add_time']}</span>
+						<span class="item"><a href="" rel="category tag">{$sortinfo['sort_name']}</a></span>
+						<span class="item"><a href="">阅读：{$article['post_num']}</a></span>
+					</div>
+				</header>
+				<div class="article-desc"><strong>摘要：</strong>{$article['keyword']}</div>
+				<article class="article-content">
+					{$article['content']}
+					{include file="public/downfee" /}
+				</article>
+				{include file="public/share" /}
+				{include file="public/relevant" /}
+			</div>
+<!--comment-->{include file="public/comment" /}
+		</div>
+	</div>
+	{include file="public/aright" /}
+</section>
+
+
+{include file="public/flooter" /}

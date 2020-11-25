@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>RainManager</title>
+		<link rel="stylesheet" type="text/css" href="__PLUG__/bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" type="text/css" href="__PLUG__/font-awesome-4.7.0/css/font-awesome.min.css"/>
+	    <link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
+	    
+       
+        
+   
+
+		<!-- Bootstrap -->
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+        <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body>
+		<nav class="navbar navbar-default" style="background-color: #373D41;">
+			<div class="container-fluid" style="background-color: #373D41;">
+				<div class="navbar-header">
+					<a style="color: #FFFFFF;" href="{:URL('/index/login/quit')}" type="button" class="navbar-toggle collapsed">
+						<i class="fa fa-sign-out"></i>
+                    </a>
+					<a class="navbar-brand" style="background: #373D41;font-size: 24px;width: 50px;" href=""><i class="fa fa-codepen"></i></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="border-left nav-li"><a href="{:URL('/admin/index')}" style="font-size: 14px;">管理控制台</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown nav-li">
+                        <a href="#" class="dropdown-toggle useredit" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-user"></i>&nbsp;{$loginuser}<span class="caret"></span>&nbsp;</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{:URL('/admin/index/uloginedit')}">编辑资料</a></li>                            
+                        </ul>
+                       </li>							                    
+                            <li class="nav-li"><a href="{:URL('/')}">&nbsp;&nbsp;<span class="glyphicon glyphicon-home"></span>&nbsp;网站首页</a></li>
+                            <li class="nav-li"><a href="{:URL('/index/login/quit')}">&nbsp;&nbsp;<span class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>	
+		

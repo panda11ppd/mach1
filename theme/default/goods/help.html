@@ -1,0 +1,8 @@
+<div class="theme-container theme-container-use" id="use">
+	<h2>{$app['app_name']}-使用说明</h2>
+    {if condition="$goods.help eq ''"}
+    <h4>暂无</h4>
+    {else /}
+    {$goods.help}
+    {/if}			
+</div>

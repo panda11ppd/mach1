@@ -1,0 +1,117 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/bootstrap-table/bootstrap-table.css"/>
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>数据备份</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">		
+			<div id="toolbar">
+			    <button id="addbak" type="button" class="btn btn-primary" onclick="handle('backup')">添加备份</button>
+			</div>			
+			<div class="table-responsive">
+				<table id="dbbak" class="table table-striped" data-url="baklist">
+				</table>
+			</div>
+		</div>		
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+{include file="public/flooter" /}
+<script src="__PLUG__/bootstrap-table/bootstrap-table.js" type="text/javascript" charset="utf-8"></script>
+<script src="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" type="text/javascript" charset="utf-8"></script>
+<script src="__PLUG__/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+    var $dbtable = $('#dbbak');
+	$(document).ready(function() {		
+		$dbtable.bootstrapTable({
+			classes: 'table-hover',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'id',
+			uniqueId: 'name',
+			toolbar: '#toolbar',
+			columns: [{
+				field: 'id',
+				title: '序号',
+				formatter: vid,
+				align: 'center'
+			}, {
+				field: 'name',
+				title: '备份名称',
+				sortable: true,
+				editable: true,				
+				align: 'center'
+			}, {
+				field: 'time',
+				title: '备份时间',
+				sortable: true,
+				editable: true,				
+				align: 'center'
+			}, {
+				field: 'size',
+				title: '备份大小',
+				sortable: true,
+				editable: true,
+				align: 'center'
+			}, {
+				field: 'op',
+				title: '操作',
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			}],
+			url: 'baklist',
+			//url: 'http://www.app.com/ss.txt',
+			//data: [{"name":"20160524163020.sql","time":"2016-05-24 16:30:20","size":"14.05KB"},{"name":"20160524163619.sql","time":"2016-05-2416:36:19","size":"14.05KB"},{"name":"20160524165738.sql","time":"2016-05-24 16:57:38","size":"14.05KB"}]
+		});
+
+		function oper(value, row, index) {
+			var durl = '{:URL("/admin/netset/bak/tp/dowonload/name/'+row.name+'")}';
+			
+			var opf = row.name;
+			var opdata = '<a style="margin-right: 5px" class="btn btn-xs btn-success" href="' + durl + '">下载</a>';
+			opdata += '<button style="margin-right: 5px" type="button" class="btn btn-xs btn-warning" onclick="handle(\'restore\',\'' + opf + '\')">还原</button>';
+			opdata += '<button type="button" class="btn btn-xs btn-danger" onclick="handle(\'del\',\'' + opf + '\')">删除</button>';
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			
+			return index;
+		}
+	});
+
+	function handle(tp, name) {
+		var $dbtable = $('#dbbak');
+		if (tp) {
+			if (tp=='del'){
+				$dbtable.bootstrapTable('removeByUniqueId', name);
+			}			
+			$.post("{:url('bak')}", {
+				tp: tp,
+				name: name
+			}, function(response) {
+				$dbtable.bootstrapTable('refresh', {silent: true});
+				if(response) {
+					
+					mes(response);
+				} else {
+                    mes("操作失败，请重试!!");					
+				}
+			});
+		}
+	}
+
+	function mes(res) {        
+       layer.msg(res,{
+            time: 1000,});
+       }
+</script>

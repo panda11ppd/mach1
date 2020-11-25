@@ -1,0 +1,40 @@
+{include file="public/header" /}
+<section class="container resetpassword-form panel">
+	
+    <form id="repwds" method="post" action="respassword" name="password_reset_form">
+        <h1 class="title">找回密码</h1>
+        <p class="suc"></p>
+        <h3>输入你的注册邮箱：</h3>
+        <p><input id="user_email" type="text" name="user_email" required autocomplete="off" class="ipt" placeholder="输入你的注册邮箱" /></p>       
+        <p><input type="submit"id="sub" name="request_password_reset" class="btn btn-primary btn-block" value="获取密码重置邮件" /></p>
+    </form>
+
+
+</section>
+
+{include file="public/flooter" /}
+
+<script type="text/javascript">
+$(function(){
+	$('#sub').click(function(){	
+	    var str_data = $("#repwds").serialize();        
+        $.ajax({   	
+		    type: "post",
+		    url: "{:URL('/index/respassword/findpwd')}",
+		    data: str_data,
+		    success: function(msg) {			
+			    if(msg.message=='success'){
+					$('.title').text(msg.content);
+					$('#repwds').attr('style','height: 29px; overflow: hidden;');
+				}
+				if(msg.message=='error'){
+					$('.suc').text(msg.content);	
+					$('.suc').attr('style','color: red;');
+				}
+				
+		    }
+	    });
+	    return false;	
+   });	
+});
+</script>

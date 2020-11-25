@@ -1,0 +1,75 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/aliico/iconfont.css"/>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">添加用户</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h1>添加用户<small></small></h1>
+			</div>
+			<form id="add" class="form-horizontal">
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">用户名</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="username" class="form-control" id="inputname" placeholder="UserName" value="" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="inputnetpwd" class="col-sm-3 col-md-3 col-lg-2 control-label">密码</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="password" class="form-control" placeholder="Password" value="" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="inputnetpwd2" class="col-sm-3 col-md-3 col-lg-2 control-label">确认密码</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="password2" class="form-control" placeholder="Password" value="" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-8 col-md-6 col-lg-4">						
+						<a class="btn btn-warning" href="{:URL('/admin/user')}" role="button">返回</a>
+						<button id="subadd" class="btn btn-primary">确认添加</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#add").serialize();			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/acard/app')}",
+				data: str_data,
+				success: function(msg) {
+					if(msg.code == 410){
+						layer.alert('URL参数错误！');
+					}
+					if(msg.code == 411){
+						layer.alert('用户名密码不能为空！');
+					}
+					if(msg.code == 412){
+						layer.alert('确认密码不相同！');
+					}if(msg.code == 413){
+						layer.alert('用户已存在！');
+					}
+					if(msg.code == 2){
+						layer.alert('用户添加成功');
+					}
+				}
+			});
+			return false;
+		});
+		
+	});
+</script>
+

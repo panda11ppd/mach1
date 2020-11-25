@@ -1,0 +1,112 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>应用相关</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="apptable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var $table = $('#apptable');
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: false,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/agents/goods',
+			columns: [{
+				field: 'goods_id',
+				title: '商品ID',
+				align: 'center'
+			}, {
+				field: 'title',
+				title: '商品名称',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'agent_count',
+				title: '代理商数量',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'agent_status',
+				title: '软件代理状态',
+				visible: false,
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '代理开关',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			}],
+		});
+		function oper(value, row, index) {			
+			var goods_id = row.goods_id;
+			var status=row.agent_status;
+			var title=row.title;
+			var opdata = '';
+			    if (status==1) {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="appset(\'stop\',\'' + goods_id + '\',\'' + title + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="appset(\'start\',\'' + goods_id + '\',\'' + title + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }		
+			return opdata;
+		}
+	});
+	function appset(sets,goods_id,title) {
+		var $table = $('#apptable');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/agents/goodsset", {
+				goodsop: sets,
+				goods_id: goods_id,
+			}, function(msg) {
+				$table.bootstrapTable('refresh', {silent: true});
+				if (msg) {					
+					layer.msg(title + msg);
+				} else {
+                    layer.msg('操作失败！请重试！');					
+				}
+			});			
+		}
+		
+	}
+	
+    function retable(index, layero){
+    	var $table = $('#apptable');
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>

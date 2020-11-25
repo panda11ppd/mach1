@@ -1,0 +1,55 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+    <div class="member-content" id="contentframe">
+    	{if condition="($order neq true)"}
+        <div class="member-contentnone">订单已取消或不存在！</div>
+        {else /}
+        <div class='orderitem'>
+        	    	
+	        <!--<div class='orderitem-hd'>
+		        <h2></h2>
+		        <h5>订单ID</h5>
+	        </div>-->
+	        <div class='orderitem-info'>
+	        	<dl>
+			        <dt>交易状态：</dt>
+			        <dd style="color: red;">交易完成<small>{$trade_status}</small></dd>
+		        </dl>
+		        <dl>
+			        <dt>商品：</dt>
+			        <dd>
+				        <a target='_blank' href="{:URL('/index/goods')}?id={$order['goods_id']}">{$order['name']}</a><small>{$order['sname']}</small>
+			        </dd>
+		        </dl>
+		        <dl>
+			        <dt>订单时间：</dt>
+			        <dd>{$order['time']}</dd>
+		        </dl>
+		        <dl>
+			        <dt>价格：</dt>
+			        <dd><dfn>&yen;</dfn>{$order['umoney']}<small>&times;{$order['num']}</small></dd>
+		        </dl>
+		        <dl class='orderitem-total'>
+			        <dt>付款金额：</dt>
+			        <dd><dfn>&yen;</dfn><span>{$order['money']}</span></dd>
+		        </dl>
+		        <dl>
+			        <dt>描术信息：</dt>
+			        <dd>{$order['body']}</dd>
+		        </dl>
+	        </div>	        
+        </div>
+        <div class="user-alerts">
+	        <h4>订单常见问题：</h4>
+	        <ul>		        
+		        <li>因商品类型为卡类，交易成功后不退回； </li>
+		        <li>交易成功后请在我的商品查看你的卡类商品； </li>
+	        </ul>
+        </div>
+        {/if}	
+	</div>
+
+</section>
+{include file="public/flooter" /}

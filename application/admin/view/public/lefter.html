@@ -1,0 +1,45 @@
+
+<div class="nav-left">
+	<div class="menu-a">
+		<ul class="nav nav-pills nava nav-stacked">
+        <li><a id="lefttop"><span style="font-size: 12px;" class="fa fa-reorder"></span></a></li>        
+        </ul>
+	</div>
+	{volist name="leftinfo" id="vo"}
+	  
+	    {if condition="($vo['menu_levelid'] eq 0)"}
+	    <ul class="nav navs {if condition="($vo['id'] == $levelid)"}nav-action{/if} nav-pills nav-stacked meun-b">				
+		    <li class="hidden-xs">
+			    <a href="#{$vo.tabs}" class="nav-header collapsed in" aria-expanded="true" data-toggle="collapse">				
+			        <i class="fa fa-caret-down icon-w">&nbsp;</i>{$vo.menu_name}<i class="{$vo.menu_icon} m-ico pull-right">&nbsp;</i>
+			    </a>
+		    </li>
+		    <li class="visible-xs">
+			    <a href="#{$vo.tabs}" class="nav-header collapsed in" aria-expanded="true" data-toggle="collapse">				
+			        &nbsp;</i><i class="{$vo.menu_icon}">&nbsp;</i>
+			    </a>
+		    </li>
+            <li class="">
+	            <ul id="{$vo.tabs}" class="nav nav-pills nav-stacked meun-c collapse {if condition="($vo['id'] == $levelid)"}in{/if}" aria-expanded="false">		
+		        {volist name="leftinfo" id="mo"}
+		            {if condition="($mo['menu_levelid'] eq $vo['id'])"}		           
+		            <li class="hidden-xs {if condition="($action eq $mo.menu_name) or ($controller eq $mo.menu_name)"}active{/if}"><a href="{:url($mo.menu_url)}"><i class="{$mo.menu_icon} fa-lg icon-x"></i>{$mo.menu_name}</a></li>
+		            <li class="visible-xs {if condition="($action eq $mo.menu_name) or ($controller eq $mo.menu_name)"}active{/if}"><a href="{:url($mo.menu_url)}"><i class="{$mo.menu_icon} fa-lg"></i></a></li>
+                    {/if}
+                {/volist}
+                </ul>
+            </li>
+        </ul>	    
+        {/if}   
+    {/volist}		
+</div>
+<!--<div class="nav-left-2">
+	<div class="menu-a-2">&nbsp;&nbsp;&nbsp;&nbsp;
+		<span style="font-size:12px;margin-top:0px ;font-weight: bold;">标题</span>        
+    </div>
+    <ul class="nav nav-x nav-pills nav-pills-x nav-stacked meun-c">		
+		<li class=""><a href="">&nbsp;&nbsp;&nbsp;&nbsp;添加文章</a></li>
+		<li class="active"><a href="">&nbsp;&nbsp;&nbsp;&nbsp;编辑文章</a></li>
+		<li class=""><a href="">&nbsp;&nbsp;&nbsp;&nbsp;添加分类</a></li>
+    </ul>
+</div>-->

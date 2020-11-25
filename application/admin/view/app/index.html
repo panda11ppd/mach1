@@ -1,0 +1,163 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>软件管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<a href="{:URL('/admin/app/add')}" role="button" type="button" class="btn btn-primary"><i class="icon-plus icon-large"></i>&nbsp;添加应用</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="apptable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var $table = $('#apptable');
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			url: '__ROOT__/admin/app?appset=list',
+			columns: [{
+				field: 'appid',
+				title: '应用ID',
+				align: 'center'
+			}, {
+				field: 'app_name',
+				title: '软件名称',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_key',
+				title: '应用KEY',
+				editable: true,
+				//formatter: oper,
+				align: 'center'
+			},{
+				field: 'version',
+				title: '版本号',
+				editable: true,
+				align: 'center'
+			}, {
+				field: 'create_time',
+				title: '创建时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'update_time',
+				title: '更新时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'down_url',
+				title: '下载地址',
+				editable: true,
+				align: 'center'
+			}, {
+				field: 'free',
+				title: '是否收费',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_status',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'test_time',
+				title: '试用分钟',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			}],
+		});
+		function oper(value, row, index) {			
+			var appid = row.appid;
+			var status=row.app_status;
+			var appname=row.app_name;
+			var opdata = '<a href="{:URL("/admin/app/edit")}?appid='+appid+'" role="button" style="margin-right: 5px" type="button" title="软件信息" class="btn btn-xs btn-icon"><i class="fa fa-cog"></i></a>';
+			    if (status!='<span style="color:#CC0000">已停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="appset(\'stop\',\'' + appid + '\',\'' + appname + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="appset(\'start\',\'' + appid + '\',\'' + appname + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+			    opdata += '<div style="margin-right: 5px" type="button" title="删除" class="btn btn-xs btn-del" onclick="appset(\'del\',\'' + appid + '\',\'' + appname + '\')"><i class="fa fa-trash"></i></div>';			
+			return opdata;
+		}
+	});
+	function appset(sets,appid,appname) {
+		var $table = $('#apptable');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/app/set", {
+				appop: sets,
+				appid: appid,
+			}, function(response) {
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(appname + response);
+				} else {
+                    layer.msg('操作失败！请重试！');					
+				}
+			});			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除名称为 '+appname+'应用?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	delapp(appid,appname);           
+            }, function(){           	
+            });
+		}	
+	}
+	function delapp(appid,appname){
+		var $table = $('#apptable');
+		$.get("__ROOT__/admin/app/set", {
+			appop: 'del',
+			appid: appid,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(appname+response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	var $table = $('#apptable');
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>

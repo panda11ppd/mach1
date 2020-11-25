@@ -1,0 +1,117 @@
+{include file="public/header" /}
+<div class="sign-container">
+<link rel="stylesheet" type="text/css" href="__PLUG__/slock/slide-unlock-index.css"/>
+<link rel="stylesheet" type="text/css" href="__PLUG__/rainfont/iconfont.css"/>
+
+    <span class="sign-tips" id="msgbox">密码错误</span>
+    {if condition="$netcon.status eq 0"}
+    <h1 style="color: red;">网站关闭维护中......</h1>
+    {/if}
+	<form class="sign-form"id="login" name="loginform"> 
+	    <h1>用户登录</h1>
+	    <div class="item">
+	        <label for="inputEmail">用户名</label>
+	        <input class="ipt" type="text" name="username" required class="ipt" id="inputusername" placeholder="登录用户名">
+	    </div>
+	    <div class="item">
+	        <label for="inputPassword">密码</label>
+	        <input type="password" name="password" class="ipt" id="inputPassword" placeholder="登录密码" required>
+	    </div>
+	    <div class="item">
+	        <label for="inputPassword"> </label>
+	        <input type="hidden" name="vals" id="vals" value="" />
+            <div id="slider">
+                <div id="slider_bg"></div>	                                
+	            <span id="label">>></span> <span id="labelTip">拖动滑块验证</span> 
+			</div> 
+	    </div>
+	    <div class="sign-sign">
+	        <input id="subadd" type="submit" class="btn btn-primary btn-block" value="登 录">	        
+	    </div>
+	    <div style="margin-top: 10px;" class="sign-info">
+		    <input type="hidden" name="user" value="login">
+		    <a href="{:URL('/index/respassword')}">找回密码？</a>
+	    </div>
+	</form>
+
+</div>
+<div class="register-verification" id="info" style="display:none">
+	<div class="auth-form auth-form-text">
+		<h1 id="ht" class="title">登录成功</h1>
+		<p id="hp" class="text-center">！</p>
+	</div>
+</div>
+
+{include file="public/flooter" /}
+<script src="__PLUG__/slock/jquery.slideunlock.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        var slider = new SliderUnlock("#slider",{
+				successLabelTip : "验证通过"	
+			},function(){
+				$.ajax({   
+                url:'login/vals',   
+                type:'post',   
+                data:'set=val',
+                error:function(){
+                	
+                },
+                success:function(data){   
+                $('#vals').val(data);
+                var width=$("#slider_bg").width();
+                
+                $("#label").replaceWith('<span id="label" style="left: '+width+'px;"><i style="color: #71B402;" class="fa">&#xe619</span>'); 
+              
+                }
+            });
+            	
+        	});
+        slider.init();
+    })
+</script> 
+
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#login").serialize();			
+			$.ajax({
+				type: "post",
+				url: "{:URL('/index/login/login')}",
+				data: str_data,
+				success: function(msg) {
+					
+					if(msg.code==10){						
+						$('#msgbox').text('用户名或密码错误！');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.code==11){
+						
+						$('#msgbox').text('用户已被禁用！请联系管理员！');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.code==12){
+						
+						$('#msgbox').text('验证未通过！');
+						$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+					}
+					if(msg.msg=='success'){
+						$('#ht').text('登录成功');
+						$('#hp').text('正在为您跳转页面！');
+						$('#info').attr('style','');
+						$('.sign-container').attr('style','display:none');
+						if(msg.code==1){
+							location.href = "{:URL('/admin/index')}";
+						}
+						if(msg.code==2){
+							location.href = "{:URL('/index/order')}";
+						}
+						
+					}
+					
+				}
+			});
+			return false;
+		});
+		
+	});
+</script>

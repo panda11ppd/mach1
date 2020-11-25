@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="__PLUG__/bootstrap/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="__PLUG__/Font-Awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/index.css"/>
+		<script src="__PLUG__/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PLUG__/bootstrap/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<title>跳转提示</title>
+		<style type="text/css">
+		    .login-bg {
+		    	background: #293038;	            
+	            width: 100%;
+	            height: 100%;
+            }
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			body {
+				background: #293038;
+				font-family: '微软雅黑';
+				color: #CCC;
+				font-size: 16px;
+			}
+			
+			.system-message {
+				padding: 24px 38px;
+				margin: auto;
+				border: #EEEEEE 2px solid;
+				top: 40%;
+				width: 380px;
+				border-radius: 8px;
+				-moz-border-radius: 8px;
+				/* Old Firefox */
+			}
+			
+			.system-message h2 {
+				font-size: 60px;
+				font-weight: normal;
+				line-height: 30px;
+				margin-bottom: 5px;
+			}
+			
+			.system-message .jump {
+				padding-top: 10px;
+				color: #999;
+			}
+			
+			.system-message .success,
+			.system-message .error {
+				line-height: 1.8em;
+				color: #999;
+				font-size: 36px;
+				font-family: '黑体';
+			}
+			
+			.system-message .detail {
+				font-size: 12px;
+				line-height: 20px;
+				margin-top: 12px;
+				display: none
+			}
+		</style>
+		
+		<script type="text/javascript">
+			$(function() {
+				var height2 = $('.system-message').height();
+				var height1 = $(window).height();
+				$('.system-message').css('margin-top', ((height1 - height2) / 2) - 100);
+			});
+		</script>
+		<!-- Bootstrap core CSS -->
+		
+	</head>
+
+	<body class="login-bg">
+		<div class="loginBox regbox system-message">
+			<?php switch ($code) {?>
+				<?php case 1:?>
+				<h2 class="glyphicon glyphicon-ok-circle" style="color:#09F"></h2>
+				<p class="success">
+					<?php echo($msg); ?>
+				</p>
+			<?php break;?>
+            <?php case 0:?>
+				<h2 class="glyphicon glyphicon-exclamation-sign" style="color:#F33"></h2>
+				<p class="error">
+					<?php echo($msg); ?>
+				</p>
+			<?php break;?>
+            <?php } ?>
+			<p class="detail"></p>
+			<p class="jump">
+				页面自动 <a id="href" class="text-primary" href="<?php echo($url); ?>">跳转</a> 等待时间： <b id="wait"><?php echo($wait); ?></b>
+			</p>
+		</div>
+		<script type="text/javascript">
+			(function() {
+				var wait = document.getElementById('wait'),
+					href = document.getElementById('href').href;
+				var interval = setInterval(function() {
+					var time = --wait.innerHTML;
+					if (time <= 0) {
+						location.href = href;
+						clearInterval(interval);
+					};
+				}, 1000);
+			})();
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,84 @@
+body,
+form,
+div,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+table,
+tr,
+th,
+td,
+input,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+input,
+textarea {
+	font-family:  "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
+}
+.navbar {	
+    border-radius: 0px;
+    min-height: 60px;
+    margin-bottom: 0px;
+}
+.btn {
+	border-radius: 2px;
+}
+.btn-primary {
+    color: #ffffff;
+    background-color: #3280FC;
+    border-color: #3280FC;
+    border: 0px solid transparent;
+	border-radius: 2px;
+}
+.navbar-nav {
+    float: left;
+    margin-top: 20px;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: #FFFFFF;
+    font-size: 16px;
+}
+.thu-0 {
+	border: 0px solid #FFFFFF;
+}
+ 
+.loginBox {
+	margin-top: 100px;
+	margin-bottom: 100px;
+	width: 580px;
+	height: 220px;
+	padding: 0 20px;
+	border: 1px solid #fff;
+	color: #000;
+	border-radius: 8px;
+	box-shadow: 0 0 15px #222;
+	background: -moz-linear-gradient(top, #fff, #efefef 8%);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#f6f6f6), to(#f4f4f4));
+	font: 11px/1.5em 'Microsoft YaHei';
+}
+
+.loginBox h2 {
+	height: 35px;
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.loginBox .left {
+	border-right: 1px solid #ccc;
+	height: 100%;
+	padding-right: 20px;
+} 
+.regbox {
+	width: 420px;
+	height: auto;
+}

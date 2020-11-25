@@ -1,0 +1,29 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+    <div class="member-content" id="contentframe">
+        <div class="member-avatar">
+        	<span etap="member_avatar">
+        	    <img class="avatar" src="__PUBLIC__/static/images/user.png">
+            </span>
+        	<input type="file" name="" id="" class="member-avatar-file">
+        	<span etap="member_avatar">头像</span></div><form>
+			  	<ul class="user-meta">
+			  		<li><label>注册时间：</label>
+						{$createtime}
+			  		</li><li><label>用户名：</label>
+						{$loginuser}
+			  		</li><li><label>用户ID：</label>
+						{$loginuid}
+			  		</li>
+			  		<li>
+			  			<br>
+						<!--<input type="button" etap="user_data_submit" class="btn btn-primary" name="submit" value="确认修改资料">
+						<input type="hidden" name="action" value="info">-->
+			  		</li>
+			  	</ul>
+			</form>		
+	</div>
+</section>
+{include file="public/flooter" /}

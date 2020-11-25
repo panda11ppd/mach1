@@ -1,0 +1,74 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">支付设置</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h3>支付宝设置<small></small></h3>
+			</div>
+			
+			
+			<form id="rainpay" class="form-horizontal">					
+				<input type="hidden" name="name" id="name" value="rainpay" />
+				<div class="form-group">
+					<label for="seller_id" class="col-sm-3 col-md-3 col-lg-2 control-label">支付宝合作者ID</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="seller_id" class="form-control" id="seller_id" placeholder="合作者ID" value="{$rainpay['seller_id']}" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="key" class="col-sm-3 col-md-3 col-lg-2 control-label">安全检验码</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="key" class="form-control" placeholder="安全检验码" value="{$rainpay['key']}" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="rainpay" class="col-sm-3 col-md-3 col-lg-2 control-label">支付宝帐号</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="seller_email" class="form-control" placeholder="支付宝帐号" value="{$rainpay['seller_email']}" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-8 col-md-6 col-lg-4">																		
+						<a  target="_blank" class="link text-red" href="http://www.alipay.com">支付宝官网</a>
+						<button id="rainpayadd" class="btn btn-primary pull-right">保存设置</button>
+					</div>
+				</div>
+				<div class="">
+			
+			
+           
+			
+			</div>
+			</form>
+
+			<!-------------------------------------------------------->
+																				
+			
+		</div>		
+	</box>
+</div>
+{include file="public/flooter" /}
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#rainpayadd').click(function() {
+			var str_data = $("#rainpay").serialize();			
+			$.ajax({
+				type: "get",
+				url: "{:url('/admin/pay/saverainpay')}",
+				data: str_data,
+				success: function(msg) {
+					layer.alert(msg);					
+				}
+			});
+			return false;
+		});
+		
+	});
+</script>
+

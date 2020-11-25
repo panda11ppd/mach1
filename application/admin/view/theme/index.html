@@ -1,0 +1,37 @@
+<!--acardindex-->
+{include file="public/header" /} {include file="public/lefter" /}
+
+<link rel="stylesheet" type="text/css" href="__PLUG__/jquery-ui1.121/jquery-ui.min.css"/>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>菜单管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs col-lg-12">
+			<div class="page-header page-s">
+				<h3>主题管理<small>主题编辑设置功能暂时不可用，新功能不断开发中.....</small></h3>
+			</div>
+			<div class="row">
+				{volist name="thelist" id="vo"}
+				    <div class="col-sm-3 col-md-3">
+					<div class="thumbnail">
+						<img src="__ROOT__/theme/{$vo.directory}/thumbnail.png" alt="...">
+						<div class="caption">
+							<h4>{$vo.name}<small class="pull-right">{$vo.content}</small></h4>
+							<p>{$vo.title}</p>							
+								<a href="#" class="btn btn-primary btn-sm" role="button">使用</a>
+								<a href="#" class="btn btn-default btn-sm" role="button">删除</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				{/volist}
+				
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+{include file="public/flooter" /} 
+

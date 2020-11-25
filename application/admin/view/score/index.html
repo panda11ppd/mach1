@@ -1,0 +1,89 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrapvalidator/css/bootstrapValidator.min.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>积分管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="col-sm-6">
+			<div class="page-header page-s">
+				<h1>积分设置<small></small></h1>
+			</div>
+			<form id="forms" class="form-horizontal" action="" method="post">
+				<input type="hidden" name="status" id="status" value="1" />
+				<!--<div class="form-group">
+					<label for="inputnetonoff" class="col-sm-2 col-md-2 col-lg-1 control-label">交易方式</label>
+					<div class="col-sm-8">
+						<label class="radio-inline">
+                        <input type="radio" name="status" id="inlineneton" value="1" {if condition="$resscore['status'] == 1"}checked{/if}>积分
+                    </label>
+						<label class="radio-inline">
+                        <input type="radio" name="status" id="inlinenetoff" value="0" {if condition="$resscore['status'] == 0"}checked{/if}>货币
+                    </label>
+					</div>
+				</div>-->
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">积分名称</label>
+					<div class="col-sm-8 col-md-5 col-lg-3">
+						<input type="text" name="name" class="form-control" placeholder="积分名称 如：网站积分，网站币" value="{$resscore['name']}" />
+					</div>
+					<label style="color: red;" for="inputnetname" class="control-label">名称必填</label>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">积分说明</label>
+					<div class="col-sm-8 col-md-5 col-lg-3">
+						<input type="text" name="comments" class="form-control" placeholder="积分说明" value="{$resscore['comments']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">最少充值</label>
+					<div class="col-sm-8 col-md-5 col-lg-3">
+						<input type="text" name="min_full" class="form-control" placeholder="最少充值" value="{$resscore['min_full']}"/>						
+					</div>
+					<label style="color: red;" for="inputnetname" class="control-label">最少充值金额(整数-元)</label>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">充值比例</label>
+					<div class="col-sm-8 col-md-5 col-lg-3">
+						<input type="text" name="exchange" class="form-control" placeholder="1元等于多少积分" value="{$resscore['exchange']}"/>						
+					</div>
+					<label style="color: red;" for="inputnetname" class="control-label">积分&nbsp;&nbsp;等于1元(整数)</label>
+				</div>
+				
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">网站新用户积分值</label>
+					<div class="col-sm-8 col-md-5 col-lg-3">
+						<input type="text" name="newuser_score" class="form-control" placeholder="新用户积分值，最少 0" value="{$resscore['newuser_score']}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-sm-8 col-md-5 col-lg-3">
+						<button id="sub" type="submit" style="width: 80px;height: 40px;" class="btn btn-primary">保&nbsp;存</button>
+					</div>
+				</div>
+				
+			</form>
+
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+
+
+<script type="text/javascript">
+$(function(){
+	$('#sub').click(function(){	
+	    var str_data = $("#forms").serialize();        
+        $.ajax({   	
+		    type: "POST",
+		    url: "",
+		    data: str_data,
+		    success: function(msg) {			
+			    layer.msg(msg);
+		    }
+	    });
+	    return false;	
+   });	
+});
+</script>

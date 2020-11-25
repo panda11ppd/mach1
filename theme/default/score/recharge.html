@@ -1,0 +1,96 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+    <div class="member-content" id="contentframe">
+    	{if condition="($order neq true)"}
+        <div class="member-contentnone">页面错误</div>
+        {else /}
+        <div class='orderitem'>
+        	<form id="scores" action="{:URL('/index/score/enrech')}" method="post" target="_blank">
+        		<input type="hidden" name="goods_id" value="{$order['goods_id']}" />
+			    <input type="hidden" name="typeid" value="{$order['typeid']}" />
+			    <input type="hidden" name="num" value="{$order['num']}" />
+	        <!--<div class='orderitem-hd'>
+		        <h2>{$order['uid']}</h2>
+		        <h5>用户ID</h5>
+	        </div>-->
+	        <div class='orderitem-info'>
+	        	<p style="color: red;" id="msg"></p>
+		        <dl>
+			        <dt>商品：</dt>
+			        <dd>
+				        <a target='_blank' href="">{$order['name']}</a><small>{$order['sname']}</small>
+			        </dd>
+		        </dl>
+		        
+		        <dl>
+			        <dt>价格：</dt>
+			        <dd>{$order['umoney']}&nbsp;&nbsp;<dfn>{$scoredb['name']}</dfn><dfn>&times;{$order['num']}</dfn</dd>
+		        </dl>
+
+		        
+
+		        <dl class='orderitem-total'>
+			        <dt>支付积分：</dt>
+			        <dd><span>{$order['money']}</span>&nbsp;&nbsp;<dfn>{$scoredb['name']}</dfn></dd>
+		        </dl>
+		        <dl>
+			        <dt>描术信息：</dt>
+			        <dd>{$order['body']}</dd>
+		        </dl>
+	        </div>
+	        <div class="orderitem-status">
+	        	<button type="submit" class="btn btn-primary" id="eccharge">确认交易</button>	        	
+		        <p>提示：购买好可到我的充值卡或我的授权码查看</p>
+	        </div>
+	        </form>
+        </div>
+        <div class="user-alerts">
+	        <h4>订单常见问题：</h4>
+	        <ul>		        
+		        <li>因商品类型为卡类，交易成功后不退回； </li>
+		        <li>交易成功后请在我的商品查看你的商品卡类； </li>
+	        </ul>
+        </div>
+        {/if}	
+	</div>
+
+</section>
+{include file="public/flooter" /}
+<script type="text/javascript">
+$(function(){
+	$('#eccharge').click(function(){	
+	    var str_data = $("#scores").serialize();	    
+        $.ajax({   	
+		    type: "get",
+		    url: "{:URL('/index/score/enrecharge')}",
+		    data: str_data,
+		    success: function(msg) {
+		    	if(msg.code==105){
+		    		$('#msg').text('数据有误！');
+		    	}
+		    	if(msg.code==104){
+		    		$('#msg').text('交易失败！');
+		    	}
+		    	if(msg.code==100){
+		    		$('#msg').text('数据有误！');
+		    	}
+		    	if(msg.code==106){
+		    		$('#msg').text('库存不足！');
+		    	}
+		    	if(msg.code==108){
+		    		$('#msg').text('您的积分不足，请充值！');		    		
+		    	}
+			    if(msg.code==1){
+			    	$("dl").hide();
+			    	$("#eccharge").hide();
+		    		$('#msg').text('交易成功！请到我的授权码/我的充值卡查看');
+		    	}
+		    }
+	    });
+	    return false;	
+   });	
+});
+	
+</script>

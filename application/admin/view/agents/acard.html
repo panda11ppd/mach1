@@ -1,0 +1,222 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/radiocheckbox/css/jquery-labelauty.css"/>
+<style>
+.dowebok { list-style-type: none;}
+.lis { display: inline-block;}
+.lis { margin: 5px 0;}
+input.labelauty + label { font: 12px "Microsoft Yahei";}
+</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>代理祥细</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+				<div class="row">						
+			    <div class="col-sm-12">
+			    	<ul class="dowebok">
+	                    <li class="lis"><input type="radio" name="radio" data-labelauty="管理系统"></li>
+	                    <li class="lis"><input type="radio" name="radio" data-labelauty="一键更新"></li>
+	                    <li class="lis"><input type="radio" name="radio" data-labelauty="哈哈电脑"></li>
+	                    <li class="lis"><input type="radio" name="radio" data-labelauty="没有了"></li>
+	                    <!--<li class="lis"><input type="radio" name="radio" disabled data-labelauty="不可用"></li>-->
+                    </ul>
+			    </div>
+			    <div class="col-sm-12">
+			    	<ul class="dowebok">
+	                    <li class="lis"><input type="checkbox" name="checkbox" disabled checked data-labelauty="三年卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="月卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="天卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="年卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="周卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="3天卡"></li>
+	                    <li class="lis"><input type="checkbox" name="checkbox" data-labelauty="无限卡"></li>
+                     </ul>
+			    </div>
+		       </div>						
+			<div id="toolbar">
+				<button type="button" id="dellist" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>删除</button>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="usertable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+<script src="__PLUG__/radiocheckbox/js/jquery-labelauty.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+$(function(){
+	$(':input').labelauty();
+});
+</script>
+<script type="text/javascript">
+  
+    var $table = $('#usertable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: false,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/agents/agentsinfo',
+			queryParamsType: 'limit',
+			queryParams: getdata,
+			columns: [
+			{
+				checkbox:true,				
+				align: 'center'
+			},{
+				field: 'uid',
+				title: 'UID',
+				align: 'center'
+			},{
+				field: 'name',
+				title: '用户名',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'score',
+				title: '积分',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'type_name',
+				title: '类型',
+				editable: true,
+				align: 'center'
+			}, {
+				field: 'add_time',
+				title: '加入时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '代理状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_num',
+				title: '代理应用数',				
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+        function getdata(params){
+        	var ss=JSON.stringify(params);
+        	
+        	var temp = {
+        		limit: params.pageSize,
+                offset: params.offset,
+                
+                OrderType: 1
+        	};
+        	return temp;
+        }
+		function oper(value, row, index) {			
+			
+			var uid = row.uid;
+			var status=row.status;			
+			var opdata = '';
+			    if (status!='<span style="color:#CC0000">已停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="userset(\'stop\',\'' + uid + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="userset(\'start\',\'' + uid + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+
+				opdata += '<a href="__ROOT__/admin/agents/agentsinfo?uid=' + uid +'" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon">祥细信息</a>';
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+	$("#dellist").click(function(){
+        var act=$table.bootstrapTable('getSelections');
+        if(act==false){
+       	  layer.msg('请选择要删除的列表'); 
+        }else{
+        	layer.confirm('是否批量删除选中项？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                deluser(act);
+            }, function(){
+                
+            });
+       	
+        }
+       
+      
+    });
+    function deluser(act){
+    	$.get("__ROOT__/admin/agents/set", {
+			userset: 'dellist',
+			data: act,
+		}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+    }
+
+	function userset(sets,uid) {
+		var $table = $('#usertable');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/agents/set", {
+				userset: sets,
+				uid: uid,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+			
+		
+	}
+
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>

@@ -1,0 +1,209 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<style type="text/css">
+	.fixed-table-container {   
+    border: 0px solid #dddddd  !important; 
+    border-bottom: 1px solid #dddddd  !important;  
+}
+</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>分类管理</span>
+	</div>
+
+	<box class="box-b">
+		<div class="divs col-lg-4">
+			<div class="page-header page-s">
+				<h5>添加分类目录<small></small></h5>
+			</div>
+			<form class="formsort" role="form">
+				<div class="form-group">
+					<label for="sort_name">分类名称</label>
+					<input type="text" name="sort_name" class="form-control" placeholder="分类名称">
+				</div>
+				<div class="form-group">
+					<label for="sname">别名</label>
+					<input type="text" name="description" class="form-control" placeholder="做为关键词到分类页面">
+				</div>
+				<div class="form-group">
+					<label for="sname">上级分类</label>
+					<select style="color: #336699;" name="parent_id" class="form-control">
+						<option value="0">无</option>
+						{volist name="sortdb" id="vo"}
+                        <option value="{$vo.id}">{$vo.sort_name}</option>
+                        {/volist}						
+					</select>
+				</div>
+				<div class="form-group">
+					<button type="submit" id="addsort" class="btn btn-primary">添加新分类</button>
+				</div>
+			</form>
+		</div>
+		<div class="divs col-lg-7">
+			<div id="toolbar">
+				<a role="button" href="{:URL('/admin/article/add')}" type="button" class="btn btn-primary">撰写文章</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="table">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+
+
+<script type="text/javascript">
+    var $table = $('#table');
+    $(document).ready(function() {    	
+		$('#addsort').click(function() {
+			var str_data = $(".formsort").serialize();
+			$.ajax({
+				type: "get",
+				url: "addsort",
+				data: str_data,
+				success: function(msg) {					
+					layer.alert(msg);
+					retable();
+				}
+			});
+			return false;
+		});		
+	});
+    
+    
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pageSize:20,
+			pagination: true,			
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',			
+			sidePagination: 'client',
+			url: '__ROOT__/admin/article/sortlist',
+			columns: [{
+				field: 'id',
+				title: '分类ID',
+				visible:false,
+				align: 'center'
+			}, {
+				field: 'sort_name',
+				title: '名称',
+				editable: true,
+				formatter: sortname,
+				align: 'left'
+			},{
+				field: 'description',
+				title: '别名',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'count',
+				title: '文章数',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				formatter: statu,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {			
+			
+			var sid = row.id;
+			var status=row.status;			
+			var opdata = '<a href="__ROOT__/admin/article/editsort?sort_id=' + sid +'" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon"><i class="fa fa-edit"></i></a>';
+			    if (status!=0) {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="sortset(\'stop\',\'' + sid + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="sortset(\'start\',\'' + sid + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+				opdata += '<div style="margin-right: 5px" type="button" class="btn btn-xs btn-del" onclick="sortset(\'del\',\'' + sid + '\')"><i class="fa fa-trash"></i></div>';			    	
+
+			
+			return opdata;
+		}
+        function sortname(value, row, index) {
+			var res = '<strong style="color:#336699;font-size:14px">'+value+'</strong>';			
+			return res;
+		}
+		function statu(value, row, index) {
+			var index = '<span>已启用</span>';
+			if(value < 1){
+				index = '<span style="color:#CC0000">已停用</span>';
+			}
+			return index;
+		}
+	});
+
+	function sortset(sets,srtid_id) {
+		var $table = $('#table');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/article/sortset", {
+				sortset: sets,
+				sort_id: srtid_id,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.alert(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	delsort(srtid_id);           
+            }, function(){           	
+            });
+		}	
+	}
+    function delsort(srtid_id){
+		var $table = $('#table');
+		$.get("__ROOT__/admin/article/sortset", {
+			sortset: 'del',
+			sort_id: srtid_id,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.alert(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

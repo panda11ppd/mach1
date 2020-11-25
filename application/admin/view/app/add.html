@@ -1,0 +1,141 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/aliico/iconfont.css"/>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">添加用户</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h3>添加应用<small></small></h3>
+			</div>
+			<form id="appadd" class="form-horizontal" action="" method="get">
+				<input type="hidden" name="appset" value="add">
+				<div class="form-group">
+					<label for="inputpassword" class="col-sm-3 col-md-3 col-lg-2 control-label">软件名称</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="app_name" class="form-control" id="inputname" placeholder="软件名" value="" />
+					</div>
+					<label style="color: red;" class="control-label">*</label>
+
+				</div>
+				<div class="form-group">
+					<label for="inputusername" class="col-sm-3 col-md-3 col-lg-2 control-label">应用KEY</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<div class="input-group">
+							<input type="text" name="app_key" class="form-control" id="keyid" placeholder="应用KEY" value="" />
+							<span class="input-group-btn"><button id="skey" class="btn btn-warning" type="button">生成key</button></span>
+						</div>
+					</div>
+					<label style="color: red;" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="inputpassword" class="col-sm-3 col-md-3 col-lg-2 control-label">版本号</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="version" class="form-control" id="inputname" placeholder="如：v2.0" value="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputpassword" class="col-sm-3 col-md-3 col-lg-2 control-label">下载地址</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="downurl" class="form-control" id="inputname" placeholder="http://www.xxx.com/xxx.zip" value="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputdesc" class="col-sm-3 col-md-3 col-lg-2 control-label">软件类型</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<select class="form-control" name="free">
+							<option value="1" selected="selected">收费软件</option>
+							<option value="0">免费软件</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputpassword" class="col-sm-3 col-md-3 col-lg-2 control-label">用户试用时间</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="test_time" class="form-control" id="inputname" placeholder="0为不试用" value="" />
+					</div>
+					<label style="color: red;" class="control-label">分钟</label>
+				</div>
+				<div class="form-group">
+					<label for="inputacardday" class="col-sm-3 col-md-3 col-lg-2 control-label">授权码初始时间</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="acard_time" class="form-control" id="inputname" placeholder="0" value="" />
+					</div>
+					<label style="color: red;" class="control-label">分钟</label>
+				</div>
+				<div class="form-group">
+					<label for="inputdesc" class="col-sm-3 col-md-3 col-lg-2 control-label">绑定方式</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<select class="form-control" name="app_bind">
+							<option value="0" selected="selected">不绑定</option>
+							<option value="1">绑定IP</option>
+							<option value="2">绑定机器码</option>
+							<option value="3">绑定IP与机器码</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputdesc" class="col-sm-3 col-md-3 col-lg-2 control-label">自定义数据</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<textarea class="form-control textarea" rows="5" name="app_data" placeholder=""></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputdesc" class="col-sm-3 col-md-3 col-lg-2 control-label">应用公告</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<textarea class="form-control textarea" rows="5" name="announcement" placeholder=""></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-5">
+						<a href="{:URL('/admin/app')}" role="button" type="button" class="btn btn-warning">返&nbsp;回</a>
+						<button id="subadd" type="submit" class="btn btn-primary">确&nbsp;定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#skey').click(function() {
+			var keys = randomWord(true, 32, 32);
+			$("#keyid").val(keys);
+		});
+		$('#subadd').click(function() {
+			var str_data = $("#appadd").serialize();
+			$.ajax({
+				type: "get",
+				url: "",
+				data: str_data,
+				success: function(msg) {
+					layer.alert(msg);
+				}
+			});
+			return false;
+		});
+		
+	});
+	
+	/*
+	 ** randomWord 产生任意长度随机字母数字组合
+	 ** randomFlag-是否任意长度 min-任意长度最小位[固定位数] max-任意长度最大位
+	 ** xuanfeng 2014-08-28
+	 */
+	function randomWord(randomFlag, min, max) {
+		var str = "",
+			range = min,
+			arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+		// 随机产生
+		if(randomFlag) {
+			range = Math.round(Math.random() * (max - min)) + min;
+		}
+		for(var i = 0; i < range; i++) {
+			pos = Math.round(Math.random() * (arr.length - 1));
+			str += arr[pos];
+		}
+		return str;
+	}
+</script>

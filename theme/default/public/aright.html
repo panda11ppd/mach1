@@ -1,0 +1,27 @@
+<div class="sidebar">
+		<!--广告<div class="widget widget_uis">
+			<div class="item">
+			</div>
+		</div>-->
+
+		<div class="widget widget_ui_posts">
+			<h3>最新发布</h3>
+			<ul>
+				{volist name="newarticle" id="vo"}
+                <li>
+					<a class="thumbnail" href="{$vo.urls}"><img src="{if condition="$vo.thumb_img == null"}__PUBLIC__/static/images/tsimg/{$vo.simgs}{else /}__PUBLIC__{$vo.thumb_img}{/if}" class="thumb" alt="{$vo.title}"></a>
+					<a href="{$vo.urls}">{$vo.title}</a>
+				</li>
+                {/volist}
+				
+			</ul>
+		</div>
+
+		<div class="widget widget_ui_posts">
+			<h3>热门文章</h3>
+			<ul>
+				
+			</ul>
+		</div>
+
+	</div>

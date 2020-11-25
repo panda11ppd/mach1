@@ -1,0 +1,159 @@
+<!--acardindex-->
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>支付帐单</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<!--<a role="button" href="{:URL('/admin/acard/add')}" type="button" class="btn btn-primary">生成授权码</a>-->
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="table">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+
+
+<script type="text/javascript">
+    var $table = $('#table');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/order/lists',
+			columns: [{
+				field: 'id',
+				title: '订单号',
+				align: 'center'
+			}, {
+				field: 'trade_no',
+				title: '交易号',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'user',
+				title: '用户',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sname',
+				title: '商品类型',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'name',
+				title: '商品名',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'date',
+				title: '日期',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'money',
+				title: '金额',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'num',
+				title: '数量',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'trade_status',
+				title: '交易状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {			
+			
+			var id = row.id;
+			var status=row.trade_status;
+			
+			var opdata = '';
+			    if (status=='<span style="color:#009900">未完成</span>') {
+			    	opdata += '<button style="margin-right: 5px" type="button" title="删除" class="btn btn-xs btn-del" onclick="set(\'del\',\'' + id + '\')"><i class="fa fa-trash"></button>';			    	
+			    } 
+			    if(status=='<span style="color:red">交易成功</span>') {
+			    	opdata += '<button style="margin-right: 5px" type="button" title="删除" class="btn btn-xs btn-delx" disabled><i class="fa fa-trash"></button>';
+			    }			    					    				
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+
+	function set(sets,id) {
+		var $table = $('#table');
+		
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除订单 '+id+'?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	del(id);           
+            }, function(){           	
+            });
+		}	
+			
+		
+	}
+    function del(id){
+		var $table = $('#table');
+		$.get("__ROOT__/admin/order/set", {
+			orderset:'del',
+			id: id,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

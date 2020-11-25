@@ -1,0 +1,95 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+<div class="member-content" id="contentframe">
+	<style type="text/css">
+	
+		
+	</style>
+		<form id="score">
+			  	<ul class="user-meta">
+			  		<li>
+			  			<br>
+						<!--<input type="button" etap="user_data_submit" class="btn btn-primary" name="submit" value="确认修改资料">
+						<input type="hidden" name="action" value="info">-->
+			  		</li>
+			  		<li><label>{$scoredb['name']}：</label>
+						<span style="color: red;">{$userdb['score']}</span>			  		
+			  		</li>
+			  		
+			  		<li><label>至少充值</label>						
+						<span style="color: red;">
+							最少充值&nbsp;&yen;{$scoredb['min_full']}
+						</span>
+						
+			  	    </li>
+			  	    {if condition="$rainpay['seller_id'] == true"}
+			  	    <li><label>充值(元)</label>
+						<input type="text" id="mo" class="ipt" name="scoremoney" value="{$scoredb['min_full']}">
+						<span id="compute" style="color: #006699;">
+							1元等于{$scoredb['exchange']}{$scoredb['name']}
+						</span>						
+			  	    </li>
+			  	    <li>
+						<input type="button" id="sub" etap="user_pass_submit" class="btn btn-primary" name="submit" value="确认充值">
+
+			  		</li>
+                    {/if}
+			  	    {if condition="$freevisa['imgs'] == true"}
+			  	    <li><label>扫一扫</label>
+						<img src="__PUBLIC__/{$freevisa['imgs']}"/>
+						<p id="compute" style="color: red;">
+							打开支付宝扫一扫付款，备注填写你帐号的ID({$loginuid})
+						</p>						
+			  	    </li>                   
+                    {/if}			  					  		 
+			  		
+			  	</ul>
+			</form>
+			<span class="sign-tips" id="msg" style="">错误</span>
+			
+		</div>
+		
+	</div>
+
+
+</section>
+{include file="public/flooter" /}
+
+<script type="text/javascript">
+$(function(){
+	$('#sub').click(function(){	
+	    var str_data = $("#score").serialize();        
+        $.ajax({   	
+		    type: "get",
+		    url: "{:URL('/index/order/create')}",
+		    data: str_data,
+		    success: function(msg) {			
+			    if(msg.code==100){
+						$('#msg').text('输入错误！');
+						
+				}
+			    if(msg.code==201){
+						$('#msg').text('输入错误！');
+						
+				}
+			    if(msg.code==202){
+						$('#msg').text('最少充值金额&nbsp;&yen;{$scoredb[\'min_full\']}');
+						
+				}
+			    if(msg.code==0){
+						$('#msg').text('数据错误！');
+						
+				}
+				if(msg.code==1){
+					location.href = msg.order;						
+				}
+				
+		    }
+	    });
+	    return false;	
+   });
+
+});
+</script>

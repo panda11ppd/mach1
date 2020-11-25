@@ -1,0 +1,10 @@
+<div class="theme-container theme-container-updates" id="updates">
+	<h2>{$app['app_name']}-更新</h2>
+	<div class="theme-updates">
+	{if condition="$goods.uptext eq ''"}
+    <h4>暂无</h4>
+    {else /}
+    {$goods.uptext}
+    {/if}
+	</div>
+</div>

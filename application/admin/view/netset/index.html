@@ -1,0 +1,223 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrapvalidator/css/bootstrapValidator.min.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>网站设置</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="col-sm-6">
+			<div class="page-header page-s">
+				<h3>网站设置<small></small></h3>
+			</div>
+			<ul id="myTab" class="nav nav-tabs nav-div">
+				<li class="active">
+					<a href="#home" data-toggle="tab">基本设置</a>
+				</li>
+				<li>
+					<a href="#regs" data-toggle="tab">注册与访问控制</a>
+				</li>
+			</ul>
+			<form style="margin-top: 20px;" id="netform" class="form-horizontal" action="" method="post">
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade in active" id="home">
+						<div class="form-group">
+							<label for="inputnetonoff" class="col-sm-2 col-md-2 col-lg-1 control-label">调试模式</label>
+							<div class="col-sm-2 col-lg-2">
+								<label class="radio-inline">
+                        <input type="radio" name="app_debug" id="inlineneton" value="TRUE" {if condition="config('app_debug') == TRUE"}checked{/if}> 开
+                    </label>
+								<label class="radio-inline">
+                        <input type="radio" name="app_debug" id="inlinenetoff" value="FALSE" {if condition="config('app_debug') == FALSE"}checked{/if}> 关
+                    </label>
+							</div>
+							<label class="control-label" style="color: red;" for="inputnetname">正式运营后请关闭此项</label>
+						</div>
+						<div class="form-group">
+							<label for="inputnetonoff" class="col-sm-2 col-md-2 col-lg-1 control-label">网站开关</label>
+							<div class="col-sm-8">
+								<label class="radio-inline">
+                        <input type="radio" name="status" id="inlineneton" value="1" {if condition="config('netinfo.status') == 1"}checked{/if}> 开
+                    </label>
+								<label class="radio-inline">
+                        <input type="radio" name="status" id="inlinenetoff" value="0" {if condition="config('netinfo.status') == 0"}checked{/if}> 关
+                    </label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">通讯KEY</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="key" class="form-control" id="inputname" placeholder="rain" value="{:$Think.config.netinfo.key}" />
+							</div>
+							<label style="color: red;" for="inputnetname" class="control-label">设置后请不要更改，以免验证出现问题！</label>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">网站名称</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="name" class="form-control" id="inputname" placeholder="rain" value="{:$Think.config.netinfo.name}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">网站关键词</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="keyword" class="form-control" id="inputname" placeholder="验证,软件,应用" value="{:$Think.config.netinfo.keyword}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputdesc" class="col-sm-2 col-md-2 col-lg-1 control-label">网站描述</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<textarea class="form-control textarea" rows="5" name="description" placeholder="rain网络验证">{:$Think.config.netinfo.description}</textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">版权信息</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="copyright" class="form-control" id="inputname" placeholder="Rain版权所有" value="{:$Think.config.netinfo.copyright}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">客服链接</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="cservice" class="form-control" id="inputname" placeholder="客户链接http://~~~~~~" value="{:$Think.config.netinfo.cservice}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">备案号</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="record" class="form-control" id="inputname" placeholder="闽ICP备xxxxxx号" value="{:$Think.config.netinfo.record}" />
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="regs">
+						<div class="row">
+							<div class="page-header page-s col-md-6">
+						        <h4>用户注册控制</h4>
+						    </div>
+						</div>
+						
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">每IP/*秒</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="register_time" class="form-control" id="inputname" placeholder="一般为20秒" value="{$Think.config.access_control.register_time}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">注册用户数</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="register_num" class="form-control" id="inputname" placeholder="一般为1个用户" value="{$Think.config.access_control.register_num}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">超出次数拉黑</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="register_black_count" class="form-control" id="inputname" placeholder="一般为20" value="{$Think.config.access_control.register_black_count}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="page-header page-s col-md-6">
+						        <h4>找回密码提交限制</h4>
+						    </div>
+						</div>
+						
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">每IP/*秒</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="email_repwb_time" class="form-control" id="inputname" placeholder="一般为60秒" value="{$Think.config.access_control.email_repwb_time}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">提交次数</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="email_repwb_num" class="form-control" id="inputname" placeholder="一般为1次" value="{$Think.config.access_control.email_repwb_num}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputnetname" class="col-sm-2 col-md-2 col-lg-1 control-label">超出次数拉黑</label>
+							<div class="col-sm-8 col-md-5 col-lg-3">
+								<input type="text" name="email_repwb_black_count" class="form-control" id="inputname" placeholder="一般为10" value="{$Think.config.access_control.email_repwb_black_count}" />
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-sm-8 col-md-5 col-lg-3">
+						<button id="subnet" type="submit" style="width: 80px;height: 40px;" class="btn btn-primary">保&nbsp;存</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrapvalidator/js/bootstrapValidator.min.js" /}
+<script>
+   $(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      // Get the name of active tab
+      var activeTab = $(e.target).text(); 
+      // Get the name of previous tab
+      var previousTab = $(e.relatedTarget).text(); 
+      $(".active-tab span").html(activeTab);
+      $(".previous-tab span").html(previousTab);
+   });
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#netform').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            name: {
+                message: '网站名称无效！',
+                validators: {
+                    notEmpty: {
+                        message: '名称是必需的，并且不能是空的'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 30,
+                        message: '名称必须大于1，小于30个字符长'
+                    },
+//                  regexp: {
+//                      regexp: /^[a-zA-Z0-9_]+$/,
+//                      message: 'The username can only consist of alphabetical, number and underscore'
+//                  }
+                }
+            },
+            email: {
+                validators: {
+                    notEmpty: {
+                        message: 'The email is required and cannot be empty'
+                    },
+                    emailAddress: {
+                        message: 'The input is not a valid email address'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(function(){
+	$('#subnet').click(function(){	
+	    var str_data = $("#netform").serialize();        
+        $.ajax({   	
+		    type: "POST",
+		    url: "",
+		    data: str_data,
+		    success: function(msg) {			
+			    layer.msg(msg);
+		    }
+	    });
+	    return false;	
+   });	
+});
+</script>

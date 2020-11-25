@@ -1,0 +1,343 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/radiocheckbox/css/jquery-labelauty.css" />
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>代理祥细</span>
+	</div>
+	<style type="text/css">
+		.thumbnail {
+			border: 0px solid #FFFFFF;
+			margin-bottom: 0px;
+		}
+		.dowebok {
+			list-style-type: none;
+			margin-bottom: 0px;
+		}
+		
+		.lis {
+			display: inline-block;
+			margin: 1px 0;
+		}
+		
+		
+		input.labelauty+ label {
+			font: 12px "Microsoft Yahei";
+		}
+	</style>
+
+	<box class="box-b">
+		<div class="divs">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="thumbnail">
+						<img style="border-radius: 40px;" src="__PUBLIC__/static/images/user.png" width="80px" height="80px" alt="...">
+						<div class="caption">
+							<h4><small>用户:{$userdb['name']}</small></h4>
+							<p>代理类型：{$agenttype['name']}</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="">
+						<h5><small class="col-md-4 text-right">申请时间 : </small><span>{$agentsdb['add_time']}</span></h5>
+						<h5><small class="col-md-4 text-right">代理商品 :</small><span class="text-primary">
+							{volist name="goodsdb" id="vo"}
+                            {$vo.title},
+                            {/volist}
+						</span>
+						</h5>
+						<h5><small class="col-md-4 text-right">消费积分 : </small><span class="text-danger">{$agentsdb['conscore']}</span></h5>
+						<h5><small class="col-md-4 text-right">可用积分 : </small><span class="text-warning">{$userdb['score']}</span></h5>
+						<h5><small class="col-md-4 text-right">受权卡 : </small><span class="text-info">{$acardun}/{$acard}</span></h5>
+						<h5><small class="col-md-4 text-right">充值卡 : </small><span class="text-info">{$cardun}/{$card}</span></h5>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="">
+						<h5><small class="col-md-5 text-right">上次登录 : </small><span>{$agentsdb['login_time']}</span></h5>
+						<h5><small class="col-md-5 text-right">上次登录IP :</small><span>{$agentsdb['login_ip']}</span></h5>
+						<h5><small class="col-md-5 text-right">登录次数 : </small><span>{$agentsdb['login_count']}</span></h5>
+						<form id="atype" class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">代理分类：</label>
+								<div class="col-sm-4">
+									<select name="atype" class="form-control input-sm">
+										{volist name="alltype" id="vo"}
+										<option value="{$vo.id}" {if condition="($agentsdb['type'] == $vo.id)" }selected="selected" {/if}>{$vo.name}</option>
+										{/volist}
+									</select>
+								</div>
+								<input type="hidden" name="uid" value="{$agentsdb['uid']}" />
+								<div class="col-sm-2">
+									<input type="submit" class="btn btn-primary btn-sm" id="sets" value="确认" />
+								</div>
+
+							</div>
+						</form>
+						<form id="score" class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">增加积分：</label>
+								<div class="col-sm-4">
+									<input type="text" name="score" value="" />
+								</div>
+								<input type="hidden" name="uid" value="{$userdb['uid']}" />
+								<div class="col-sm-2">
+									<input type="submit" class="btn btn-primary btn-sm" id="setscore" value="确认" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="divs">
+			
+				<form id="list" action="" method="post">
+				<div class="row">	
+				<div class="col-sm-1">
+					<h5 class="text-right">商品选项</h5>
+				</div>	
+				<div style="padding-left: 0px;" class="col-sm-11">					
+					<ul class="dowebok">
+						{volist name="goodsdb" id="vo"}
+                        <li class="lis"><input type="radio" name="appid" value="{$vo.appid}" data-labelauty="{$vo.title}"></li>
+                        {/volist}
+						
+						<!--<li class="lis"><input type="radio" name="radio" disabled data-labelauty="不可用"></li>-->
+					</ul>
+				</div>
+				</div>
+				<div class="row">
+				<div class="col-sm-1">
+					<h5 class="text-right">卡类选项</h5>
+				</div>
+				<div style="padding-left: 0px;" class="col-sm-11">
+					<ul class="dowebok">
+						<li class="lis"><input type="radio" name="cardtype" value="acard" data-labelauty="授权码"></li>
+						{volist name="cardtype" id="vo"}
+                        <li class="lis"><input type="radio" name="cardtype" value="{$vo.id}" data-labelauty="{$vo.name}"></li>
+                        {/volist}
+					</ul>
+				</div>
+				</div>
+				<input type="hidden" name="uid" value="{$userdb['uid']}" />
+				
+				</form>
+			
+			<div id="toolbar">
+				<button type="button" id="dellist" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>取消分配</button>
+			</div>
+			<div style="min-height: 500px;" class="table-responsive" data-show-refresh="true">
+				<table id="table">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+<script src="__PLUG__/radiocheckbox/js/jquery-labelauty.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+   $(function(){
+	   $(':input').labelauty();
+   });
+	$(document).ready(function() {
+		$('#sets').click(function() {
+			var str_data = $("#atype").serialize();
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/agents/agentsinfo')}",
+				data: str_data,
+				success: function(msg) {
+					layer.msg(msg);
+					setTimeout(function () {window.location.reload();}, 1000);
+					
+				
+				}
+			});
+			return false;
+		});
+	});
+	$(document).ready(function() {
+		$('#setscore').click(function() {
+			var str_data = $("#score").serialize();
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/agents/agentsinfo')}",
+				data: str_data,
+				success: function(msg) {
+					layer.msg(msg);
+					setTimeout(function () {window.location.reload();}, 1000);
+					
+				
+				}
+			});
+			return false;
+		});
+	});
+</script>
+<script type="text/javascript"> 
+    var $table = $('#table');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: false,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/agents/agentslist',
+			queryParamsType: '',
+			queryParams: getdata,
+			columns: [
+			{
+				checkbox:true,				
+				align: 'center'
+			},{
+				field: 'id',
+				title: 'ID',
+				align: 'center'
+			},{
+				field: 'number',
+				title: '卡号',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'type',
+				title: '类型',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sales_status',
+				title: '销售状态',
+				editable: true,
+				align: 'center'
+			}],
+			exportDataType:'selected'
+		});
+        function getdata(params){
+        	var data = {};
+            $("#list").serializeArray().map(function(x){
+	            if (data[x.name] !== undefined) {
+                    if (!data[x.name].push) {
+                        data[x.name] = [data[x.name]];
+                    }
+                    data[x.name].push(x.value || '');
+                } else {
+                    data[x.name] = x.value || '';
+                }
+            });
+           
+        	var temp = {
+        		limit: params.pageSize,
+                offset: params.pageNumber,
+                uid:data.uid,
+                appid:data.appid,
+                cardtype:data.cardtype,
+        	};
+        	return temp;
+        }
+
+		function oper(value, row, index) {			
+			
+			var uid = row.uid;
+			var status=row.status;			
+			var opdata = '';
+			    if (status!='<span style="color:#CC0000">已停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="userset(\'stop\',\'' + uid + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="userset(\'start\',\'' + uid + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+
+				opdata += '<a href="__ROOT__/admin/agents/agentsinfo?uid=' + uid +'" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon">祥细信息</a>';
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+	$(document).ready(function() {
+		$('.lis').change(function() {
+			var act=$table.bootstrapTable('getSelections');	
+			$table.bootstrapTable('refresh', {silent: true});
+		});
+	});
+	$("#dellist").click(function(){
+        var act=$table.bootstrapTable('getSelections');
+        if(act==false){
+       	  layer.msg('请选择要取消的列表'); 
+        }else{
+        	layer.confirm('是否批量取消分配选中项？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                dels(act);
+            }, function(){
+                
+            });
+       	
+        }             
+    });
+    function dels(act){
+    	$.get("__ROOT__/admin/agents/setdist", {
+			sets: 'dellist',
+			data: act,
+		}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+    }
+
+	function userset(sets,uid) {
+		var $table = $('#usertable');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/agents/set", {
+				userset: sets,
+				uid: uid,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+			
+		
+	}
+
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>

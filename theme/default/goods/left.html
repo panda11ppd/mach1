@@ -1,0 +1,237 @@
+<style type="text/css"> 
+.theme-orderarea-service ul {
+	margin-left: 0px;
+}
+
+.pull-left {
+	margin-top: 5px;
+	max-width: 80px;
+	float: left;
+}
+
+.gw_num {
+	border: 1px solid #dbdbdb;
+	width: 110px;
+	line-height: 26px;
+	overflow: hidden;
+}
+
+.gw_num em {
+	display: block;
+	height: 26px;
+	width: 26px;
+	float: left;
+	color: #7A7979;
+	border-right: 1px solid #dbdbdb;
+	text-align: center;
+	cursor: pointer;
+}
+
+.gw_num .num {
+	display: block;
+	float: left;
+	text-align: center;
+	width: 52px;
+	font-style: normal;
+	font-size: 14px;
+	line-height: 24px;
+	border: 0;
+}
+
+.gw_num em.add {
+	float: right;
+	border-right: 0;
+	border-left: 1px solid #dbdbdb;
+}
+
+</style>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/plug/Font-Awesome/css/font-awesome.min.css"/>
+
+<div class="theme-sidebar">
+        
+		<div class="theme-widget theme-orderarea">			
+				{if condition="$app['free'] eq 0"}
+			    <div class="theme-orderarea-price">				
+		            <strong style="color: red;"><dfn>&yen;</dfn>免费</strong>
+				    <h5>销售方式</h5>
+				</div>                   
+			    <div class="theme-orderarea-service li-s">
+				    <h6>包含以下</h6>
+				    <ul>
+				    	{volist name="money" id="vo"}
+                        <li><i class="fa">&#xe62d;</i>{$vo.name}&nbsp;</li>
+                        {/volist}
+					    
+				    </ul>
+			    </div>
+                {if condition="$goods.down_url eq ''"}
+                <a target="_blank" class="btn btn-primary btn-block disabled" href="">暂无下载地址</a>
+                {else /}
+                <a target="_blank" class="btn btn-primary btn-block" href="{$goods['down_url']}">免费产品直接下载</a>
+                {/if}			    
+			    <a class="btn btn-default btn-block" href="{$cservice}" target="_blank"><i class="fa">&#xe60a;</i>售前咨询</a>
+		        {else /}
+		        <div class="theme-orderarea-price">		        	
+		            <strong><dfn>{$tradetype}</dfn>购卡充值</strong>
+				    <h5>销售方式</h5>
+				</div>
+				<form id="goods" action="" method="get">
+			    <div class="theme-orderarea-service">
+				    <h6>包含以下</h6>
+				    <ul>
+				    	{volist name="money" id="vo"}
+				    	{if condition="($vo['money'] == 0)"}				    	
+				    	{else /}
+				    	{if condition="($vo['count'] == 0)"}
+				    	<li class="li-s"><i class="fa">&#xe62d;</i>
+				    		<div class="radio" disabled>
+                                <label>                              			    		
+				    		        <input type="radio" name="typeid" id="type" value="" disabled>
+				    		        {$vo.name}&nbsp;|&nbsp;售价:{$vo.money}&nbsp;|&nbsp;库存:{$vo.count}
+                                </label>
+                            </div>
+				    		</li>	
+				    	{else /}
+				    	
+				    	<li><i class="fa">&#xe619;</i>	
+				    		<div class="radio">
+                                <label>                               			    		
+				    		        <input type="radio" name="typeid" id="type" value="{$vo.typeid}">
+				    		       {$vo.name}&nbsp;|&nbsp;<font color="red">售价:{$vo.money}&nbsp;{$tradetype}/{$vo.time}
+				    		       	{if condition="($vo.typeid >= 1)"}
+				    		       	天
+				    		       	{else /}
+				    		       	分钟
+				    		       	{/if}
+				    		       </font>&nbsp;|&nbsp;库存:{$vo.count}
+                                </label>
+                            </div>
+				    	</li>
+				    	
+				    	{/if}
+				    	{/if}				    				    					    	
+                        {/volist}
+                        {if condition="($titles == true)"}
+                            <li><label class="pull-left">数量&nbsp&nbsp</label>
+					    	<div class="gw_num">
+                                <em class="jian"><i class="icon-minus"></i></em>
+                                <input type="text" name="num" value="1" class="num"/>
+                                <em class="add"><i class="icon-plus"></i></em>
+                            </div>                          
+					        </li>
+                        {/if}
+					    
+				    </ul>
+			    </div>
+			    <p id="msg" style="color: red;" class="text-center"></p>
+			    <a href="{:URL('/index/score/index')}" id="recharge" target="_blank"></a>
+                {if condition="$loginuid > 0"}
+                <a type="button" href="javascript:void(0);" id="goodsgo" class="btn btn-primary btn-block" href="">立即购买</a>
+				{else /}
+				<a class="btn btn-primary btn-block" href="{:URL('/index/login')}">登陆购买</a>
+				{/if}			    
+			    <a class="btn btn-default btn-block" href="{$cservice}" target="_blank"><i class="fa">&#xe60a;</i> 售前咨询</a>
+		        {/if}				
+		        </form>
+		</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	//加的效果
+	$(".add").click(function() {
+		var n = $(this).prev().val();
+		var num = parseInt(n) + 1;
+		if(num == 0) {
+			return;
+		}
+		$(this).prev().val(num);
+	});
+	//减的效果
+	$(".jian").click(function() {
+		var n = $(this).next().val();
+		var num = parseInt(n) - 1;
+		if(num == 0) {
+			return
+		}
+		$(this).next().val(num);
+	});
+})
+</script>
+		<div class="theme-widget alert alert-warning theme-alerts">
+			{$goods['copyright']}
+		</div>
+
+		<div class="theme-widget theme-counter hidden-pad-up">
+			<strong>提示：</strong>请先仔细阅读产品使用说明再购买该产品。
+		</div>
+
+		<div class="theme-widget theme-counter">
+			<strong>热度：</strong>该产品页被访问 {$goods['count']}次
+		</div>
+
+		<div class="theme-widget theme-counter">
+			<i class="fa">&#xe60c;</i>已销售：<strong>{$goods['buy_count']}</strong>
+		</div>
+
+		
+		<a class="theme-widget theme-wlink" href="http://www.rain68.com" target="_blank">
+			<i class="fa">&#xe60d;</i>Rain版权所有
+		</a>
+
+	</div>
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#goodsgo').click(function() {
+			var str_data = "goods_id={$goods['goods_id']}&" + $("#goods").serialize();
+
+			$.ajax({
+				type: "get",
+				url: "{:URL('/index/order/create')}",
+				data: str_data,
+				success: function(msg) {
+					if(msg.code==100){
+						$('#msg').text('请选择你要购买的商品！');
+						
+					}
+					if(msg.code==101){
+						$('#msg').text('请选择你要购买的类型！');
+					}
+					if(msg.code==105){
+						$('#msg').text('库存不足！');
+					}
+					if(msg.code==0){
+						$('#msg').text('未知错误！');
+					}
+					if(msg.code==1){
+						location.href = msg.order;						
+					}
+					if(msg.code==188){
+						$('#msg').text('余额不足！请先充值.');
+						$('#recharge').text('去充值');
+						$('#recharge').attr('class','btn btn-warning btn-block');
+						
+					}
+					if(msg.code==118){
+						
+						location.href = msg.tourl+'?'+parseParam(msg.data);						
+					}
+					
+				}
+			});
+			return false;
+		});
+	    var parseParam = function(param, key) {
+            var paramStr = "";
+            if (param instanceof String || param instanceof Number || param instanceof Boolean) {
+                paramStr += "&" + key + "=" + encodeURIComponent(param);
+            } else {
+                $.each(param, function(i) {
+                    var k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i);
+                    paramStr += '&' + parseParam(this, k);
+                });
+            }
+            return paramStr.substr(1);
+        };
+		
+	});
+</script>
+	

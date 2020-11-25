@@ -1,0 +1,194 @@
+<!--acardindex-->
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.min.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>充值卡类型管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<form id="typeadd" class="form-inline" role="form">
+					
+					<input type="hidden" name="add" id="add" value="type" />
+					<div class="form-group">
+						<label class="control-label" for="name">添加卡类:&nbsp;&nbsp;</label>
+						<input type="text" name="name" class="form-control" id="typename" placeholder="类型名称" value="">
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="name">&nbsp;</label>
+						<input type="text" name="day" class="form-control" id="day" placeholder="使用天数" value="">
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="name">&nbsp;</label>
+					<button id="subadd" type="submit" class="btn btn-primary">确认添加</button>
+					
+					</div>
+				</form>
+				
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="typetable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.min.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.min.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#typeadd").serialize();			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/card/typeadd')}",
+				data: str_data,
+				success: function(msg) {
+					var $table = $('#typetable');
+					$table.bootstrapTable('refresh', {silent: true});
+				    layer.alert(msg);					
+				}
+			});
+			return false;
+		});
+		
+	});
+	
+</script>
+
+<script type="text/javascript">
+    var $table = $('#typetable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/card/typelist',
+			columns: [{
+				field: 'id',
+				title: 'ID',
+				align: 'center'
+			}, {
+				field: 'name',
+				title: '名称',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'create_time',
+				title: '创建时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'day',
+				title: '使用天数',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {			
+			
+			var id = row.id;
+			var status=row.status;
+			var name=row.name;
+			var opdata = '';
+			    if (status=='<span style="color:#009900">启用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="typeset(\'stop\',\'' + id + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } 
+			    if(status=='<span style="color:#666666">停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="typeset(\'start\',\'' + id + '\')"><i class="fa fa-toggle-on"></i></div>';
+			    }
+			    
+				opdata += '<div style="margin-right: 5px" type="button" title="del" class="btn btn-xs btn-del" onclick="typeset(\'del\',\'' + id + '\',\'' + name + '\')"><i class="fa fa-trash"></i></div>';			    	
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+
+	function typeset(sets,id,name) {
+		var $table = $('#typetable');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/card/typeset", {
+				typeset: sets,
+				id: id,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除卡号为  “'+name+'” 充值卡?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	deltype(id,name);           
+            }, function(){           	
+            });
+		}	
+			
+		
+	}
+    function deltype(id,name){
+		var $table = $('#typetable');
+		$.get("__ROOT__/admin/card/typeset", {
+			typeset:'del',
+			type: name,
+			id: id,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

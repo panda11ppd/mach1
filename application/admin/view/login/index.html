@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录</title>
+<link href="__PUBLIC__/static/admin/css/body.css" rel="stylesheet" type="text/css">
+<link href="__PUBLIC__/static/admin/css/login.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div class="top width">
+	<div class="txt-1 marign">
+    	<h1>后台管理登录</h1>
+    </div>	
+    <div class="txt-2 marign">
+    	RainCMS网络验证,Rain版权所有,免费开源！
+    </div>	
+</div>
+
+<div class="bottom width">
+	<div class="kuang marign">
+    	<div class="nei">
+        	<div class="nei-2 marign">
+        		<p id="msgbox"></p>
+                <form id="login" action="" method="post">
+                    <input class="sy-1" name="username" type="text" value="用户名" onfocus="if(this.value==&quot;用户名&quot;){this.value=&quot;&quot;;};" onblur="if(this.value==&quot;&quot;){this.value=&quot;用户名&quot;;};">
+                    <input class="sy-1" name="password" type="password" placeholder="Password"><br/>
+                    <input style="cursor:pointer" class="sy-2" id="subadd" type="submit" value="登&nbsp;&nbsp;&nbsp;&nbsp;录"><br/>
+                </form>
+                <!--<div class="width left txt-3"><a href="">忘记密码?</a></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="__PLUG__/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#login").serialize();			
+			$.ajax({
+				type: "post",
+				url: "{:URL('/admin/login/login')}",
+				data: str_data,
+				success: function(msg) {
+					
+					if(msg.code==10){						
+						$('#msgbox').text('用户名或密码错误！');
+						$('#msgbox').attr('style','height: 29px;color: red; overflow: hidden;');
+					}
+					if(msg.code==11){
+						
+						$('#msgbox').text('用户已被禁用！请联系管理员！');
+						$('#msgbox').attr('style','height: 29px;color: red; overflow: hidden;');
+					}
+					if(msg.code==12){
+						
+						$('#msgbox').text('验证未通过！');
+						$('#msgbox').attr('style','height: 29px;color: red; overflow: hidden;');
+					}
+					if(msg.msg=='success'){						
+						if(msg.code==1){
+							location.href = "{:URL('/admin/index')}";
+						}
+						if(msg.code==2){
+							location.href = "{:URL('/index/order')}";
+						}
+						
+					}
+					
+				}
+			});
+			return false;
+		});
+		
+	});
+</script>
+</html>

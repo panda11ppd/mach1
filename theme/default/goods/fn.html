@@ -1,0 +1,10 @@
+<div class="theme-container theme-container-fns" id="fns">
+	<h2>{$app['app_name']}-功能</h2>
+	<div class="theme-fns">
+		{if condition="$goods.fns eq ''"}
+		<h4>暂无</h4>
+		{else /}
+		{$goods.fns}
+		{/if}
+	</div>
+</div>

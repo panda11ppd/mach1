@@ -1,0 +1,159 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>用户管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<a role="button" href="{:URL('/admin/goods/add')}" type="button" class="btn btn-primary">添加商品</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="table">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+<!--<a class="btn btn-xs btn-success" href="/index.php/admin/netset/bak/tp/dowonload/name/20160517154306.sql.html">下载</a>-->
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+
+
+<script type="text/javascript">
+    var $table = $('#table');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,
+			sidePagination: 'server',
+			url: '__ROOT__/admin/goods/goodslist',
+			columns: [{
+				field: 'goods_id',
+				title: '商品ID',
+				align: 'center'
+			}, {
+				field: 'title',
+				title: '标题',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_name',
+				title: '应用名称',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'create_time',
+				title: '创建时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'count',
+				title: '访问量',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {			
+			
+			var goodsid = row.goods_id;
+			var status=row.status;			
+			var opdata = '<a href="__ROOT__/admin/goods/edit?goodsid=' + goodsid +'" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon"><i class="fa fa-edit"></i></a>';
+			    if (status!='<span style="color:#CC0000">停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="goodsset(\'stop\',\'' + goodsid + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="goodsset(\'start\',\'' + goodsid + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+				opdata += '<div style="margin-right: 5px" type="button" class="btn btn-xs btn-del" onclick="goodsset(\'del\',\'' + goodsid + '\')"><i class="fa fa-trash"></div>';			    	
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+	});
+
+	function goodsset(sets,goodsid) {
+		var $table = $('#table');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/goods/set", {
+				goodsset: sets,
+				goodsid: goodsid,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	delgoods(goodsid);           
+            }, function(){           	
+            });
+		}
+		
+			
+		
+	}
+    function delgoods(goodsid){
+		var $table = $('#table');
+		$.get("__ROOT__/admin/goods/set", {
+			goodsset: 'del',
+			goodsid: goodsid,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

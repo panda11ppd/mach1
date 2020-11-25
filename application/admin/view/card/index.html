@@ -1,0 +1,321 @@
+
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/radiocheckbox/css/jquery-labelauty.css" />
+	<style type="text/css">
+		.thumbnail {
+			border: 0px solid #FFFFFF;
+			margin-bottom: 0px;
+		}
+		.dowebok {
+			list-style-type: none;
+			margin-bottom: 0px;
+		}
+		
+		.lis {
+			display: inline-block;
+			margin: 1px 0;
+		}
+		
+		
+		input.labelauty+ label {
+			font: 12px "Microsoft Yahei";
+		}
+	</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>充值卡管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<form id="list" action="" method="post">
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">应用选项</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							{volist name="appdb" id="vo"}
+							<li class="lis"><input type="radio" name="appid" value="{$vo.appid}" data-labelauty="{$vo.app_name}"></li>
+							{/volist}
+							<!--<li class="lis"><input type="radio" name="radio" disabled data-labelauty="不可用"></li>-->
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">可用状态</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							<li class="lis"><input type="radio" name="status" value="1" data-labelauty="启用"></li>
+							<li class="lis"><input type="radio" name="status" value="0" data-labelauty="停用"></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">销售状态</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-11">
+						<ul class="dowebok">
+							<li class="lis"><input type="radio" name="sales_status" value="0" data-labelauty="未出售"></li>
+							<li class="lis"><input type="radio" name="sales_status" value="1" data-labelauty="已出售"></li>
+							<li class="lis"><input type="radio" name="sales_status" value="2" data-labelauty="已使用"></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<h5 class="text-right">卡类选项</h5>
+					</div>
+					<div style="padding-left: 0px;" class="col-sm-10">
+						<ul class="dowebok">
+							{volist name="cardtypedb" id="vo"}
+							<li class="lis"><input type="radio" name="typeid" value="{$vo.id}" data-labelauty="{$vo.name}"></li>
+							{/volist}
+							<!--<li class="lis"><input type="radio" name="radio" disabled data-labelauty="不可用"></li>-->
+						</ul>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="divs">
+			<div id="toolbar">
+				<button type="button" id="dellist" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>删除</button>
+				<a role="button" href="{:URL('/admin/card/type')}" type="button" class="btn btn-success">卡类管理</a>
+				<a role="button" href="{:URL('/admin/card/add')}" type="button" class="btn btn-primary">生成充值卡</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="cardtable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+<script src="__PLUG__/radiocheckbox/js/jquery-labelauty.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+	   $(':input').labelauty();
+	   
+   });
+</script>
+
+
+<script type="text/javascript">
+    var $table = $('#cardtable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',
+			showExport: true,						
+			sidePagination: 'server',
+			url: '__ROOT__/admin/card/cardlist',
+			queryParamsType: '',
+			queryParams: getdata,
+			columns: [
+			{
+				checkbox:true,				
+				align: 'center'
+			},{
+				field: 'id',
+				title: 'ID',
+				align: 'center'
+			}, {
+				field: 'card_number',
+				title: '卡号',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'user',
+				title: '使用者',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'app_name',
+				title: '所属应用',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'create_time',
+				title: '创建时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sales_time',
+				title: '销售时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'type',
+				title: '卡类型',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sales_status',
+				title: '销售状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+			exportDataType:'selected'
+		});
+        function getdata(params){        	
+        	var data = {};
+            $("#list").serializeArray().map(function(x){
+	            if (data[x.name] !== undefined) {
+                    if (!data[x.name].push) {
+                        data[x.name] = [data[x.name]];
+                    }
+                    data[x.name].push(x.value || '');
+                } else {
+                    data[x.name] = x.value || '';
+                }
+            });
+            
+        	var temp = {
+        		limit: params.pageSize,
+                offset: params.pageNumber,
+                search: params.searchText,
+                appid:data.appid,
+                status:data.status,
+                sales_status:data.sales_status,
+                typeid:data.typeid,
+        	};
+        	return temp;
+        }
+        $('.lis').change(function() {
+			var act=$table.bootstrapTable('getSelections');	
+			$table.bootstrapTable('refresh', {silent: true});
+		});
+		function oper(value, row, index) {						
+			var id = row.id;
+			var status=row.status;
+			var card=row.card_number;
+			var opdata = '';
+			    if (status=='<span style="color:#009900">启用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="cardset(\'stop\',\'' + id + '\')"><sapn class="fa fa-toggle-on"></sapn></div>';			    	
+			    } 
+			    if(status=='<span style="color:#666666">停用</span>') {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="cardset(\'start\',\'' + id + '\')"><sapn class="fa fa-toggle-off"></sapn></div>';
+			    }
+			    
+				opdata += '<div style="margin-right: 5px" type="button" title="del" class="btn btn-xs btn-del" onclick="cardset(\'del\',\'' + id + '\',\'' + card + '\')"><i class="fa fa-trash"></i></div>';			    	
+
+			
+			return opdata;
+		}
+
+		function vid(value, row, index) {
+			//var row=index;
+			return index;
+		}
+		
+	});
+	
+    $("#dellist").click(function(){
+        var act=$table.bootstrapTable('getSelections');
+        if(act==false){
+       	  layer.msg('请选择要删除的列表'); 
+        }else{
+        	layer.confirm('是否批量删除选中项？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                dellist(act);
+            }, function(){
+                
+            });       	
+        }           
+    });
+    function dellist(act){
+    	$.post("__ROOT__/admin/card/set", {
+			cardset: 'dellist',
+			data: act,
+		}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+    }
+	function cardset(sets,id,card) {
+		var $table = $('#cardtable');
+		if(sets=='stop' || sets=='start'){						
+			$.post("__ROOT__/admin/card/set", {
+				cardset: sets,
+				id: id,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除卡号为 '+card+'充值卡?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	delcard(id,card);           
+            }, function(){           	
+            });
+		}	
+			
+		
+	}
+    function delcard(id,card){
+		var $table = $('#cardtable');
+		$.post("__ROOT__/admin/card/set", {
+			cardset:'del',
+			card: card,
+			id: id,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

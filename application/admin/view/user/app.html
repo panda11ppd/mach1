@@ -1,0 +1,160 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>用户管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div id="toolbar">
+				<h4>用户&nbsp<span style="color: #00AAEE;">{$username}</span>&nbsp软件管理</h4>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="apptable">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+{js href="__PLUG__/layer/layer.js" /}
+
+
+<script type="text/javascript">
+    var $table = $('#apptable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-hover',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			search: true,
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'appid',
+			showexport: true,
+			uniqueId: 'appid',
+			toolbar: '#toolbar',
+			showExport: true,
+			url: '__ROOT__/admin/user/app?uid={$uid}&table=list',
+			columns: [{
+				field: 'appid',
+				title: '软件ID',
+				align: 'center'
+			}, {
+				field: 'app_name',
+				title: '软件名',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'active',
+				title: '激活状态',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '使用状态',
+				editable: true,
+				align: 'center'
+			}, {
+				field: 'active_time',
+				title: '激活时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'expire_time',
+				title: '到期时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'bind_ip',
+				title: '绑定IP',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'bind_mcode',
+				title: '绑定机器码',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'bind_count',
+				title: '剩余解绑数',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'user_data',
+				title: '用户自定义数据',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {
+			var appid = row.appid;
+			var exptime=row.expire_time;
+			
+			var status=row.active;			
+			if (status!='<span style="color:#00CC00">已激活</span>') {
+			    var opdata = '<button style="margin-right: 5px" type="button" title="激活" class="btn btn-xs btn-success" onclick="userapp(\'active\',\'' + appid + '\')">激活</button>';	
+			} else{
+			    var opdata = '<a role="button" href="{:URL("/admin/user/appedit")}?uid={$uid}&appid=' + appid + '" style="margin-right: 5px" type="button" title="编辑" class="btn btn-xs btn-default"">编辑</a>';
+			}			  				
+			return opdata;
+		}
+		
+	});
+    function userapp(type,ops){
+    	var uname='{$username}';
+    	var uid='{$uid}';
+    	if(type=='active'){
+    		var appid=ops;
+    	    $.get('{:URL("/admin/user/activeapp")}', {
+			    userset: type,
+			    uid: {$uid},//php传的变量用户ID
+			    appid: appid,
+		    }, function(response) {
+			    if (response) {					
+				    layer.alert(response);
+				    retable();
+			    } else {
+                    layer.alert('操作失败！请重试！');					
+			    }
+		    });
+		}
+	} 
+    function editdateadd(enddate,ops){
+    	$.get("", {
+				userset: enddate,
+				userid: {$uid},//php传的变量用户ID
+				sid: ops,
+			}, function(response) {
+				if (response) {					
+					layer.alert(response);
+					retable();
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});
+	}
+
+
+    function retable(){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

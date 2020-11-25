@@ -1,0 +1,74 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+<div class="member-content" id="contentframe">
+	
+		<form id="pwd">
+			  	<ul class="user-meta">
+			  		<li><label>原密码</label>
+						<input type="password" class="ipt" name="password">
+			  		</li>
+			  		<li><label>新密码</label>
+						<input type="password" class="ipt" name="passwordnew">
+			  		</li>
+			  		<li><label>重复新密码</label>
+						<input type="password" class="ipt" name="passworden">
+			  		</li>
+			  		<li>
+						<input type="button" id="editpwd" etap="user_pass_submit" class="btn btn-primary" name="submit" value="确认修改密码">
+
+			  		</li>
+			  	</ul>
+			</form>
+			<span class="sign-tips" id="msgbox" style="">密码错误</span>
+			<div class="register-verification" id="info" style="display:none">
+			<div class="auth-form auth-form-text">
+				<h1 id="ht" style="color: red;" class="title">修改成功</h1>
+				<p id="hp" style="color: red;" class="text-center">您的密码已修改成功！</p>
+			</div>
+		</div>
+		
+	</div>
+
+
+</section>
+{include file="public/flooter" /}
+
+<script type="text/javascript">
+$(function(){
+	$('#editpwd').click(function(){	
+	    var str_data = $("#pwd").serialize();        
+        $.ajax({   	
+		    type: "post",
+		    url: "{:URL('/index/repwd/edit')}",
+		    data: str_data,
+		    success: function(msg) {			
+			    if(msg.code==11){
+					$('#msgbox').text('两次密码不相同或密码为空');
+					$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+				}
+				if(msg.code==12){
+					$('#msgbox').text('非法操作用户');
+					$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+				}
+				if(msg.code==13){
+					$('#msgbox').text('原密码不正确');
+					$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+				}
+				if(msg.code==1){
+					$('#ht').text('修改成功');
+					$('#hp').text('您的密码已修改成功！');
+					$('#info').attr('style','');
+					$('#pwd').attr('style','display:none');
+				}
+				if(msg.code==0){
+					$('#msgbox').text('非法操作');
+					$('#msgbox').attr('style','height: 29px; overflow: hidden;');
+				}
+		    }
+	    });
+	    return false;	
+   });	
+});
+</script>

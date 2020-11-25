@@ -1,0 +1,63 @@
+{include file="public/header" /}
+{include file="user/top" /}
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+    <div class="member-content" id="contentframe">
+    	{if condition="($order neq true)"}
+        <div class="member-contentnone">订单已取消或不存在！</div>
+        {else /}
+        <div class='orderitem'>
+        	<form action="{:URL('/index/rainpay/alipayapi')}" method="post" target="_blank">
+        		<input type="hidden" name="WIDout_trade_no" id="out_trade_no" value="{$order['id']}" />
+			    <input type="hidden" name="WIDsubject" value="{$order['name']}{$order['sname']}" />
+			    <input type="hidden" name="WIDtotal_fee" value="{$order['money']}" />
+			    <input type="hidden" name="WIDbody" value="{$order['body']}" />        	
+	        <div class='orderitem-hd'>
+		        <h2>{$order['id']}</h2>
+		        <h5>订单ID</h5>
+	        </div>
+	        <div class='orderitem-info'>	        	
+		        <dl>
+			        <dt>商品：</dt>
+			        <dd>
+				        <a target='_blank' href="{:URL('/index/goods')}?id={$goods['goods_id']}">{$order['name']}</a><small>{$order['sname']}</small>
+			        </dd>
+		        </dl>
+		        <dl>
+			        <dt>订单时间：</dt>
+			        <dd>{$order['time']}</dd>
+		        </dl>
+		        <dl>
+			        <dt>价格：</dt>
+			        <dd><dfn>&yen;</dfn>{$order['umoney']}<small>&times;{$order['num']}</small></dd>
+		        </dl>
+
+		        
+
+		        <dl class='orderitem-total'>
+			        <dt>付款金额：</dt>
+			        <dd><dfn>&yen;</dfn><span>{$order['money']}</span></dd>
+		        </dl>
+		        <dl>
+			        <dt>描术信息：</dt>
+			        <dd>{$order['body']}</dd>
+		        </dl>
+	        </div>
+	        <div class="orderitem-status">
+	        	<button type="submit" class="btn btn-primary" id="alipay" etap="pay_action" orderid="{$order['id']}">支付宝付款</button>	        	
+		        <p>提示：支付宝付款通道支持各类银行/信用卡快捷支付</p>
+	        </div>
+	        </form>
+        </div>
+        <div class="user-alerts">
+	        <h4>订单常见问题：</h4>
+	        <ul>		        
+		        <li>因商品类型为卡类，交易成功后不退回； </li>
+		        <li>交易成功后请在我的商品查看你的商品卡类； </li>
+	        </ul>
+        </div>
+        {/if}	
+	</div>
+
+</section>
+{include file="public/flooter" /}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>{$seo['title']}</title>
+		<meta name="keywords" content="{$seo['keywords']}">
+        <meta name="description" content="{$seo['description']}">
+		<link rel="stylesheet" type="text/css" href="__THEME__/default/css/app.css" />
+        <script src="__PLUG__/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- Bootstrap -->
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+        <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="{$body}">    
+		<header class="header">
+			<div class="container">
+				<h1 class="logo"><a href="{:URL('/index')}">{$netcon['name']}</a></h1>
+				<div class="site-navbar">
+					<ul>
+						{volist name="menu" id="vo"}
+						<li class="">
+							<a href="{$vo.menu_url}">{$vo.name}</a>
+
+						</li>
+                        {/volist}
+												
+						<!--<li class="">
+					<a href="{:URL('/index/article_list')}">客户服务</a>					
+				</li>
+				<li class="">
+					<a href="{:URL('/index/help')}">常见问题</a>
+				</li>-->
+					</ul>
+				</div>
+				{if condition="($loginuid == null)"}
+				<div class="wel-login">
+					<a href="{:URL('/index/register')}" class="btn">注册</a>
+					<a href="{:URL('/index/login')}" class="btn btn-primary">登录</a>
+				</div>
+
+				<div class="m-wel">
+					<div class="m-wel-login">
+						<img class="avatar" src="__PUBLIC__/static/images/tb.png">
+						<a class="m-wel-login" href="{:URL('/index/login')}">登 录</a>
+						<a class="m-wel-register" href="{:URL('/index/register')}">注册新用户</a>
+					</div>
+				</div>
+                {else /}
+                
+                <div class="wel">
+					<img class="avatar" src="__PUBLIC__/static/images/user.png"> <span class="wel-name">{$loginuser}</span>
+					<div class="sub-menu">
+						<ul>
+							{if condition="($loginuid == 1)"}
+							<li><a href="{:url('/admin/index')}">后台管理</a></li> 
+							{/if}
+							{volist name="menu1" id="mo"}
+		                    <li><a href="{:url($mo.url)}">{$mo.name}</a></li>                          
+                            {/volist}
+                            {volist name="menu2" id="ma"}
+		                    <li><a href="{:url($ma.url)}">{$ma.name}</a></li>                          
+                            {/volist}
+							
+							<li>
+								<a href="{:URL('/index/login/quit')}">退出</a>
+							</li>
+						</ul>						 
+					</div>					
+				</div>                	
+				<div class="m-wel">
+					<header>
+						<img class="avatar" src="__PUBLIC__/static/images/user.png">
+						<h4>d-14126926598254630</h4>
+						<h5>80692285@qq.com</h5>
+					</header>
+					<div class="m-wel-content">
+						<ul>
+							{if condition="($loginuid == 1)"}
+							<li><a href="{:url('/admin/index')}">后台管理</a></li> 
+							{/if}
+							{volist name="menu1" id="mo"}
+		                    <li><a href="{:url($mo.url)}">{$mo.name}</a></li>                          
+                            {/volist}
+                            {volist name="menu2" id="ma"}
+		                    <li><a href="{:url($ma.url)}">{$ma.name}</a></li>                          
+                            {/volist}
+							<li>
+								<a href="{:URL('/index/login/quit')}">退出</a>
+							</li>
+						</ul>
+						
+					</div>
+					<footer>
+						<a href="{:URL('/index/login/quit')}">退出当前账户</a>
+					</footer>
+			    </div>
+                   
+                {/if}
+								
+			<div class="m-navbar-start"><i class="fa">&#xe624;</i></div>
+			<div class="m-wel-start"><i class="fa">&#xe632;</i></div>
+			<div class="m-mask"></div>
+			</div>
+
+		</header>

@@ -1,0 +1,82 @@
+{include file="public/header" /}
+{include file="user/top" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+<script src="__PLUG__/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<section class="container" id="jaxcontainer">
+{include file="user/left" /}
+    <div class="member-content" id="contentframe">
+
+		
+		<table id="otable" class="">
+		</table>	
+    </div>
+
+</section>
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+
+
+<script type="text/javascript">
+    var $table = $('#otable');
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table table-no-bordered',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pagination: true,
+			showPaginationSwitch: false,
+			showFooter:false,			
+			search: false,
+			searchOnEnterKey: false,
+			showColumns: false,
+			showRefresh: false,
+			showToggle: false,
+			showPaginationSwitch: false,
+			idField: 'id',
+			showexport: false,
+			uniqueId: 'id',			
+			showExport: false,
+			sidePagination: 'server',
+			url: '__ROOT__/index/user_acard/acardlist',
+			columns: [{
+				field: 'order_id',
+				title: '订单号',
+				align: 'center'
+			},{
+				field: 'name',
+				title: '商品名称',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'acard_number',
+				title: '授权码',
+				align: 'center'
+			},{
+				field: 'acard_time',
+				title: '初始时间(分钟)',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'sales_time',
+				title: '购买时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'expire_time',
+				title: '到期时间',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'astatus',
+				title: '状态',
+				editable: true,
+				align: 'center'
+			},],
+		});
+		
+
+	});
+
+</script>

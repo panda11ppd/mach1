@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>RainCMS升级工具</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="__PLUG__/bootstrap4/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/install/css/style.css" />
+		<script src="__PLUG__/jquery/jquery.min.js"></script>
+
+	</head>
+	<body>
+		<div class="container">
+			<form class="form-inline" action="{:URL('/install/update/update')}" method="get">
+				<h3>RainCMS升级</h3>
+			    <div class="form-group">
+                    <label for="exampleInputName2">数据库密码</label>
+                    <input type="text" class="form-control" name="datapwd" placeholder="数据库密码">
+                </div>
+                <input type="submit" class="btn btn-primary" value="确认升级">
+           </form>
+		</div>
+	</body>
+</html>

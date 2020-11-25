@@ -1,0 +1,70 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">添加节点</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h2>添加节点<small></small></h2>
+			</div>
+			<form id="edit" class="form-horizontal">
+				<input type="hidden" name="editrid" value="{$ruledb['id']}" />
+				<div class="form-group">
+					<label for="inputtitle" class="col-sm-3 col-md-3 col-lg-2 control-label">节点名称</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="title" class="form-control" id="inputname" placeholder="节点名称" value="{$ruledb['title']}" />
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label">*</label>
+				</div>
+				<div class="form-group">
+					<label for="inputs" class="col-sm-3 col-md-3 col-lg-2 control-label">节点地址</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<input type="text" name="name" class="form-control" id="inputname" placeholder="节点名称" value="{$ruledb['name']}" disabled="disabled"/>
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label"></label>
+				</div>
+				<div class="form-group">
+					<label for="inputs" class="col-sm-3 col-md-3 col-lg-2 control-label">节点分类</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<select class="form-control" name="group">
+					        {volist name="resgroup" id="vo"}					                                   
+                            <option value="{$vo.menu_name}" {if condition="($ruledb['group'] == $vo.menu_name)"} selected="selected"{/if}>{$vo.menu_name}</option>
+                            {/if}
+                            {/volist}
+                        </select>
+					</div>
+					<label style="color: red;" for="inputnetonoff" class="control-label"></label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-8 col-md-6 col-lg-4">						
+						<a class="btn btn-warning" href="{:URL('/admin/authrule/index')}" role="button">返回</a>
+						<button id="subedit" class="btn btn-primary">确认编辑</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subedit').click(function() {
+			var str_data = $("#edit").serialize();			
+			$.ajax({
+				type: "get",
+				url: "",
+				data: str_data,
+				success: function(msg) {
+					layer.msg(msg);
+					setTimeout(function () { 
+                         location.reload();
+                    }, 2000);
+				}
+			});
+			return false;
+		});
+				
+	});
+</script>
+

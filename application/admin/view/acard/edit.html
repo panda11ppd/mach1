@@ -1,0 +1,143 @@
+{include file="public/header" /} {include file="public/lefter" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/aliico/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="__PLUG__/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">授权码管理</span>
+	</div>
+	<box class="box-b">
+		<div class="divs" class="row">
+			<div class="page-header page-s">
+				<h1>编辑授权码<small></small></h1>
+			</div>
+			<form id="edit" class="form-horizontal">
+				<div class="form-group">
+					<input type="hidden" name="set" id="id" value="edit" />
+					<input type="hidden" name="id" id="id" value="{$res['id']}" />
+					<input type="hidden" name="acard" id="id" value="{$res['acard_number']}" />
+					<label for="inputnumber" class="col-sm-3 col-md-3 col-lg-2 control-label">授权码</label>					
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$res['acard_number']}</p>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">用户</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$user}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">应用名</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$app_name}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">销售状态</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$sales_status}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputcoutn" class="col-sm-3 col-md-3 col-lg-2 control-label">充值次数</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: red;" class="form-control-static">{$res['fee_count']}&nbsp次</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">上次登录IP</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$res['loginip']}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">激活时间</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p style="color: #0087B4;" class="form-control-static">{$activetime}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">到期时间</label>
+					<div class="col-sm-6 col-md-5 col-lg-3">
+						<input type="text" id="time" name="expire_time" class="form-control" placeholder="Name" value="{$expiretime}" readonly/>
+					</div>
+					
+				</div>
+				<div class="form-group">
+					<label for="inputpwd" class="col-sm-3 col-md-3 col-lg-2 control-label">绑定方式</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<select class="form-control" name="bind">
+							<option value="0" {if condition="$res['bind']==0" }selected{/if}>不绑定</option>
+							<option value="1" {if condition="$res['bind']==1" }selected{/if}>绑定IP</option>
+							<option value="2" {if condition="$res['bind']==2" }selected{/if}>绑定机器码</option>
+							<option value="3" {if condition="$res['bind']==3" }selected{/if}>绑定IP与机器码</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">绑定IP信息</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p class="form-control-static text-warning">{$res['bind_ip']}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">绑定机器码信息</label>
+					<div class="col-sm-8 col-md-6 col-lg-4">
+						<p class="form-control-static text-warning">{$res['bind_mcode']}</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputnetname" class="col-sm-3 col-md-3 col-lg-2 control-label">剩余解绑次数</label>
+					<div class="col-sm-2 col-md-2 col-lg-1">
+						<input type="text" name="bind_count" class="form-control" value="{$res['bind_count']}">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-8 col-md-6 col-lg-4">
+						<a role="button" href="{:URL('/admin/acard')}" type="button" class="btn btn-warning">返回</a>
+						<button id="subedit" type="submit" class="btn btn-primary">确认修改</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</box>
+</div>
+
+{include file="public/flooter" /}
+<script src="__PUBLIC__/static/plug/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+ 
+	$(document).ready(function() {		
+		$('#subedit').click(function() {
+			var str_data = $("#edit").serialize();
+			
+			$.ajax({
+				type: "get",
+				url: "{:URL('/admin/acard/edit')}",
+				data: str_data,
+				success: function(msg) {
+					layer.alert(msg);
+				}
+			});
+			return false;
+		});		
+	});
+	$.fn.datetimepicker.dates['en'] = {
+		days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+		daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+		daysMin: ["日", "一", "二", "三", "四", "五", "六", "日"],
+		months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+		monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+		today: "今天",
+		suffix: [],
+		meridiem: ["上午", "下午"]
+	};
+	$("#time").datetimepicker({
+		format: 'yyyy-mm-dd hh:ii:ss',
+		autoclose: true,
+		todayBtn: true,
+		minView: 1,
+	});
+</script>

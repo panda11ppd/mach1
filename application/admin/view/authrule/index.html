@@ -1,0 +1,162 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrap-table/bootstrap-table.css" /}
+{css href="__PUBLIC__/static/css/table.css" /}
+<style type="text/css">
+	.fixed-table-container {   
+    border: 0px solid #dddddd  !important; 
+    border-bottom: 1px solid #dddddd  !important;  
+}
+</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;</span><span>节点管理</span>
+	</div>
+
+	<box class="box-b">		
+		<div class="divs">
+			<div id="toolbar">
+				<a role="button" href="{:URL('/admin/authrule/add')}" type="button" class="btn btn-primary">添加节点</a>
+			</div>
+			<div class="table-responsive" data-show-refresh="true">
+				<table id="table">
+				</table>
+			</div>
+		</div>
+	</box>
+</div>
+
+
+
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrap-table/bootstrap-table.js" /}
+{js href="__PLUG__/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/bootstrap-table-export.js" /}
+{js href="__PLUG__/bootstrap-table/extensions/export/tableExport.js" /}
+
+
+
+<script type="text/javascript">
+    var $table = $('#table');
+   
+	$(document).ready(function() {		
+		$table.bootstrapTable({
+			classes: 'table',
+			paginationPreText: '上一页',
+			paginationNextText: '下一页',
+			pageSize:10,
+			pagination: true,			
+			searchOnEnterKey: true,
+			showColumns: true,
+			showRefresh: true,
+			showToggle: true,
+			showPaginationSwitch: true,
+			idField: 'uid',
+			showexport: true,
+			uniqueId: 'uid',
+			toolbar: '#toolbar',			
+			sidePagination: 'server',
+			url: '__ROOT__/admin/authrule/rulelist',
+			columns: [{
+				field: 'id',
+				title: 'ID',
+				visible:true,
+				align: 'left'
+			}, {
+				field: 'title',
+				title: '名称',
+				editable: true,				
+				align: 'left'
+			},{
+				field: 'name',
+				title: '地址',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'group',
+				title: '节点分类',
+				editable: true,
+				align: 'center'
+			},{
+				field: 'status',
+				title: '状态',
+				editable: true,
+				formatter: statu,
+				align: 'center'
+			},{
+				field: 'op',
+				title: '操作',				
+				editable: true,
+				formatter: oper,
+				align: 'center'
+			},],
+		});
+
+		function oper(value, row, index) {			
+			
+			var rid = row.id;
+			var status=row.status;			
+			var opdata = '<a href="__ROOT__/admin/authrule/edit?rid=' + rid +'" title="设置" role="button" style="margin-right: 5px" type="button" class="btn btn-xs btn-icon"><i class="fa fa-cog"></i></a>';
+			    if (status!=0) {
+			    	opdata += '<div style="margin-right: 5px" type="button" title="停用" class="btn btn-xs btn-on" onclick="ruleset(\'stop\',\'' + rid + '\')"><i class="fa fa-toggle-on"></i></div>';			    	
+			    } else{
+			    	opdata += '<div style="margin-right: 5px" type="button" title="启用" class="btn btn-xs btn-off" onclick="ruleset(\'start\',\'' + rid + '\')"><i class="fa fa-toggle-off"></i></div>';			    	
+			    }
+				opdata += '<div style="margin-right: 5px" type="button" class="btn btn-xs btn-del" onclick="ruleset(\'del\',\'' + rid + '\')"><i class="fa fa-trash"></i></div>';			    	
+
+			
+			return opdata;
+		}
+        
+		function statu(value, row, index) {
+			var index = '<span>已启用</span>';
+			if(value < 1){
+				index = '<span style="color:#CC0000">已停用</span>';
+			}
+			return index;
+		}
+	});
+
+	function ruleset(sets,rid) {
+		var $table = $('#table');
+		if(sets=='stop' || sets=='start'){						
+			$.get("__ROOT__/admin/authrule/set", {
+				ruleset: sets,
+				rid: rid,
+			}, function(response) {
+				//$table.bootstrapTable('removeByUniqueId', uid);//
+				$table.bootstrapTable('refresh', {silent: true});
+				if (response) {					
+					layer.msg(response);
+				} else {
+                    layer.alert('操作失败！请重试！');					
+				}
+			});			
+		}
+		if(sets=='del'){
+			layer.confirm('<i style="color:#FF6633" class="icon-warning-sign icon-2x"></i> 是否删除?', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+            	del(rid);           
+            }, function(){           	
+            });
+		}	
+	}
+    function del(rid){
+		var $table = $('#table');
+		$.get("__ROOT__/admin/authrule/set", {
+			ruleset: 'del',
+			rid: rid,
+		}, function(response) {
+			$table.bootstrapTable('refresh', {silent: true});
+			if (response) {					
+				layer.msg(response);
+			} else {
+                layer.alert('操作失败！请重试！');					
+			}
+		});
+	}
+    function retable(index, layero){
+    	$table.bootstrapTable('refresh', {silent: true});
+    }
+</script>
+

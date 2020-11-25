@@ -1,0 +1,692 @@
+{include file="public/header" /} {include file="public/lefter" /}
+{css href="__PLUG__/bootstrapvalidator/css/bootstrapValidator.min.css" /}
+<link rel="stylesheet" type="text/css" href="__PLUG__/webuploader/webuploader.css">
+<style type="text/css">
+	.webuploader-pick {   
+        border-radius: 0px;    
+    }
+    #delexpimg {
+    	height: 40px;
+    	margin-left: 5px;
+    	
+    }
+    .edui-default .edui-editor-toolbarboxouter {
+		background-image: linear-gradient(to bottom, #F1F1F1, #f1f1f1);
+		
+    }
+    .edui-default .edui-editor {
+		border-radius: 0px;
+    }
+    
+</style>
+<div class="container-fluid box-a">
+	<div class="nav-c">
+		<span class="glyphicon glyphicon-tag">&nbsp;<span id="">编辑商品</span>
+	</div>
+	<box class="box-b">
+		<div class="divs">
+			<div style="height: 100%;" class="row">
+				<div class="page-header page-s">
+					<h5>编辑APP商品<small></small></h5>
+				</div>
+				<form id="goodsform" role="form" action="" method="post">
+					<div class="col-md-8 col-sm-8">
+						<input type="hidden" name="goodsid" id="goodsid" value="{$goodsid}" />
+						<div class="form-group">
+							<label for="inputtitle" class="control-label">商品标题</label>
+							<input type="text" name="title" class="form-control" id="title" placeholder="商品标题" value="{$goods['title']}" />
+						</div>
+						<div class="form-group">
+							<label for="inputstitle" class="control-label">副标题</label>
+							<input type="text" name="stitle" class="form-control" id="title" placeholder="副标题" value="{$goods['stitle']}" />
+						</div>
+						<div class="form-group">
+							<label for="inputdesc" class="control-label">APP名称</label>
+							<p style="color: #0087B4;" class="form-control-static">{$appname}</p>
+							<input type="hidden" name="appid" id="appid" value="{$appid}" />
+						</div>
+
+						<div class="form-group">
+							<label for="inputstitle" class="control-label">展示图</label>
+							<input type="hidden" name="expimg" class="form-control" id="expimg" placeholder="展示图" value="{$goods['expimg']}" />
+							<div id="uploader-demos">
+								<!--用来存放item-->
+								<div id="fileLists" class="uploader-lists"></div>
+								{if condition="$goods.expimg neq null"}
+								<div id="divimgs" class="file-item thumbnail">
+									<img id="imgids" src="__PUBLIC__{$goods['expimg']}">
+								</div>
+								{/if}
+								<div class="pull-left" id="filePickers">选择图片</div>
+								<button type="button" id="delexpimg" class="btn btn-default">清除</button>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="inputhelp" class="control-label">使用说明</label>
+							<script id="help" name="help" type="text/plain">{$goods['help']}
+							</script>
+						</div>
+						<div class="form-group">
+							<label for="inputfns" class="control-label">功能价绍</label>
+							<script id="fns" name="fns" type="text/plain">{$goods['fns']}
+							</script>
+						</div>
+						<div class="form-group">
+							<label for="inputuptext" class="control-label">更新说明</label>
+							<script id="uptext" name="uptext" type="text/plain">{$goods['uptext']}
+							</script>
+						</div>
+						<div class="form-group">
+							<label for="inputstitle" class="control-label">下载地址</label>
+							<input type="text" name="down_url" class="form-control" id="title" placeholder="下载地址" value="{$goods['down_url']}" />
+						</div>
+					</div>
+					<!------------------------------right---------------------------------------------------------->
+					<div class="col-md-4">
+						<label>发布设置</label>
+					</div>
+					<div class="col-md-4">
+						<div class="panel panel-s panel-default">
+							<div class="panel-body">
+								<div class="page-header page-0">
+									<h6 style="font-weight:800">价格设置</h6>
+								</div>
+								<table class="table table-condensed table-s">
+									<thead>
+										<tr>
+											<th>类型</th>
+											<th>价格</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><label class="label-s text-right">授权码价格：</label></td>
+											<td><input type="text" name="acardmoney" class="form-control" id="acard" placeholder="价格" value="{$acardmoney}" /></td>
+										</tr>
+
+										{volist name="card_type" id="co"}
+										<tr>
+											<td><label class="label-s text-right">{$co.name}</label></td>
+
+											<td><input type="text" name="typeid_{$co.id}" class="form-control" id="money" placeholder="价格" value="{$co.money}" /></td>
+										</tr>
+										{/volist}
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="panel panel-s panel-default">
+							<div class="panel-body">
+								<div class="page-header page-0">
+									<h6 style="font-weight:800">特色图片&nbsp;320*180</h6>
+								</div>
+								<label for="inputcopyright" class="sr-only">特色图片</label>
+
+								<!--dom结构部分-->
+								<div id="uploader-demo">
+									<!--用来存放item-->
+									<div id="fileList" class="uploader-list">
+										{if condition="$goods.imgs neq null"}
+										<div id="divimg" class="file-item thumbnail">
+											<img id="imgid" src="__PUBLIC__{$goods['imgs']}">
+										</div>
+										{/if}
+									</div>
+									<div class="pull-left" id="filePicker">选择图片</div>
+									<button type="button" id="delimgs" class="btn btn-default pull-right">清除</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel panel-s panel-default">
+							<div class="panel-body">
+								<div class="page-header page-0">
+									<h6 style="font-weight:800">版权声明</h6>
+								</div>
+								<label for="inputcopyright" class="sr-only">版权声明</label>
+								<textarea class="form-control textarea" rows="8" name="copyright" placeholder="">{$goods['copyright']}</textarea>
+							</div>
+						</div>
+						<input type="hidden" name="imgs" id="imgs" value="{$goods['imgs']}" />
+						<div class="form-group">
+							<div class="pull-right">
+								<a class="btn btn-warning" href="{:URL('/admin/goods')}" role="button">返回</a>
+								<button type="submit" id="subadd" class="btn btn-primary">发布</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</box>
+</div>
+{include file="public/flooter" /}
+{js href="__PLUG__/bootstrapvalidator/js/bootstrapValidator.min.js" /}
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__PLUG__/webuploader/webuploader.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {		
+		$('#subadd').click(function() {
+			var str_data = $("#goodsform").serialize();
+			
+			$.ajax({
+				type: "post",
+				url: "{:URL('/admin/goods/edit')}",
+				data: str_data,
+				success: function(msg) {
+					layer.alert(msg);
+				}
+			});
+			return false;
+		});		
+	});
+</script>
+<script type="text/javascript">
+	$("#delimgs").click(function(){
+       $('#divimg').remove();
+       $('#imgs').val('');
+    });
+    $("#delexpimg").click(function(){
+       $('#divimgs').remove();
+       $('#expimg').val('');
+    });
+</script>
+<script type="text/javascript">
+// 图片上传demo
+jQuery(function() {
+    var $ = jQuery,
+        $list = $('#fileLists'),
+        // 优化retina, 在retina下这个值是2
+        ratio = window.devicePixelRatio || 1,
+
+        // 缩略图大小
+        thumbnailWidth = 100 * ratio,
+        thumbnailHeight = 100 * ratio,
+
+        // Web Uploader实例
+        uploader;
+
+    // 初始化Web Uploader
+    uploader = WebUploader.create({
+
+        // 自动上传。
+        auto: true,
+
+        // swf文件路径
+        swf: '__PLUG__/webuploader/Uploader.swf',
+        // 文件接收服务端。
+        server: 'upload',
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePickers',
+        // 只允许选择文件，可选。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+    	$("#divimgs").remove();
+        var $li = $(
+                '<div id="divimgs" class="file-item thumbnail">' +
+                    '<img id="imgids">' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+        $list.append( $li );
+
+        // 创建缩略图
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight );
+    });
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file,response ) {
+        $( '#'+file.id ).addClass('upload-state-done');
+        var furl='/uploads/'+response._raw;
+        $('#imgids').attr('src','__PUBLIC__'+furl);
+        $('#expimg').val(furl);
+         
+    });
+
+    // 文件上传失败，现实上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+});
+</script>
+<script type="text/javascript">
+// 图片上传demo
+jQuery(function() {
+    var $ = jQuery,
+        $list = $('#fileList'),
+        // 优化retina, 在retina下这个值是2
+        ratio = window.devicePixelRatio || 1,
+
+        // 缩略图大小
+        thumbnailWidth = 100 * ratio,
+        thumbnailHeight = 100 * ratio,
+
+        // Web Uploader实例
+        uploader;
+
+    // 初始化Web Uploader
+    uploader = WebUploader.create({
+
+        // 自动上传。
+        auto: true,
+
+        // swf文件路径
+        swf: '__PLUG__/webuploader/Uploader.swf',
+        // 文件接收服务端。
+        server: 'upload',
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePicker',
+        // 只允许选择文件，可选。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+    	$("#divimg").remove();
+        var $li = $(
+                '<div id="divimg" class="file-item thumbnail">' +
+                    '<img id="imgid">' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+        $list.append( $li );
+
+        // 创建缩略图
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight );
+    });
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file,response ) {
+        $( '#'+file.id ).addClass('upload-state-done');
+        var furl='/uploads/'+response._raw;
+        $('#imgid').attr('src','__PUBLIC__'+furl);
+        $('#imgs').val(furl);
+         
+    });
+
+    // 文件上传失败，现实上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+});
+</script>
+
+
+
+<script type="text/javascript">
+    //实例化编辑器
+    var ue = UE.getEditor('help',{toolbars: [
+    [
+        //'anchor', //锚点
+        'undo', //撤销
+        'redo', //重做
+        'bold', //加粗
+        //'indent', //首行缩进
+        //'snapscreen', //截图
+        //'italic', //斜体
+        //'underline', //下划线
+        //'strikethrough', //删除线
+        //'subscript', //下标
+        //'fontborder', //字符边框
+        //'superscript', //上标
+        //'formatmatch', //格式刷
+        'source', //源代码
+        'blockquote', //引用
+        //'pasteplain', //纯文本粘贴模式
+        //'selectall', //全选
+        //'print', //打印
+        //'preview', //预览
+        'horizontal', //分隔线
+        //'removeformat', //清除格式
+        //'time', //时间
+        //'date', //日期
+        'unlink', //取消链接
+        //'insertrow', //前插入行
+        //'insertcol', //前插入列
+        //'mergeright', //右合并单元格
+        //'mergedown', //下合并单元格
+        //'deleterow', //删除行
+        //'deletecol', //删除列
+        //'splittorows', //拆分成行
+        //'splittocols', //拆分成列
+        //'splittocells', //完全拆分单元格
+        //'deletecaption', //删除表格标题
+        //'inserttitle', //插入标题
+        //'mergecells', //合并多个单元格
+        //'deletetable', //删除表格
+        //'cleardoc', //清空文档
+        //'insertparagraphbeforetable', //"表格前插入行"
+        //'insertcode', //代码语言
+        'fontfamily', //字体
+        'fontsize', //字号
+        //'paragraph', //段落格式
+        //'simpleupload', //单图上传
+        //'insertimage', //多图上传
+        //'edittable', //表格属性
+        //'edittd', //单元格属性
+        'link', //超链接
+        //'emotion', //表情
+        //'spechars', //特殊字符
+        //'searchreplace', //查询替换
+        //'map', //Baidu地图
+        //'gmap', //Google地图
+        //'insertvideo', //视频
+        //'help', //帮助
+        'justifyleft', //居左对齐
+        'justifyright', //居右对齐
+        'justifycenter', //居中对齐
+        //'justifyjustify', //两端对齐
+        'forecolor', //字体颜色
+        //'backcolor', //背景色
+        'insertorderedlist', //有序列表
+        'insertunorderedlist', //无序列表
+        'fullscreen', //全屏
+        //'directionalityltr', //从左向右输入
+        //'directionalityrtl', //从右向左输入
+        //'rowspacingtop', //段前距
+        //'rowspacingbottom', //段后距
+        //'pagebreak', //分页
+        //'insertframe', //插入Iframe
+        //'imagenone', //默认
+        //'imageleft', //左浮动
+        //'imageright', //右浮动
+        //'attachment', //附件
+        //'imagecenter', //居中
+        //'wordimage', //图片转存
+        //'lineheight', //行间距
+        //'edittip ', //编辑提示
+        //'customstyle', //自定义标题
+        //'autotypeset', //自动排版
+        //'webapp', //百度应用
+        //'touppercase', //字母大写
+        //'tolowercase', //字母小写
+        //'background', //背景
+        //'template', //模板
+        //'scrawl', //涂鸦
+        //'music', //音乐
+        //'inserttable', //插入表格
+        //'drafts', // 从草稿箱加载
+        //'charts', // 图表
+    ]
+]});
+    var ue = UE.getEditor('fns',{toolbars: [
+    [
+        //'anchor', //锚点
+        'undo', //撤销
+        'redo', //重做
+        'bold', //加粗
+        //'indent', //首行缩进
+        //'snapscreen', //截图
+        //'italic', //斜体
+        //'underline', //下划线
+        //'strikethrough', //删除线
+        //'subscript', //下标
+        //'fontborder', //字符边框
+        //'superscript', //上标
+        //'formatmatch', //格式刷
+        'source', //源代码
+        'blockquote', //引用
+        //'pasteplain', //纯文本粘贴模式
+        //'selectall', //全选
+        //'print', //打印
+        //'preview', //预览
+        'horizontal', //分隔线
+        //'removeformat', //清除格式
+        //'time', //时间
+        //'date', //日期
+        'unlink', //取消链接
+        //'insertrow', //前插入行
+        //'insertcol', //前插入列
+        //'mergeright', //右合并单元格
+        //'mergedown', //下合并单元格
+        //'deleterow', //删除行
+        //'deletecol', //删除列
+        //'splittorows', //拆分成行
+        //'splittocols', //拆分成列
+        //'splittocells', //完全拆分单元格
+        //'deletecaption', //删除表格标题
+        //'inserttitle', //插入标题
+        //'mergecells', //合并多个单元格
+        //'deletetable', //删除表格
+        //'cleardoc', //清空文档
+        //'insertparagraphbeforetable', //"表格前插入行"
+        //'insertcode', //代码语言
+        'fontfamily', //字体
+        'fontsize', //字号
+        //'paragraph', //段落格式
+        //'simpleupload', //单图上传
+        //'insertimage', //多图上传
+        //'edittable', //表格属性
+        //'edittd', //单元格属性
+        'link', //超链接
+        //'emotion', //表情
+        //'spechars', //特殊字符
+        //'searchreplace', //查询替换
+        //'map', //Baidu地图
+        //'gmap', //Google地图
+        //'insertvideo', //视频
+        //'help', //帮助
+        'justifyleft', //居左对齐
+        'justifyright', //居右对齐
+        'justifycenter', //居中对齐
+        //'justifyjustify', //两端对齐
+        'forecolor', //字体颜色
+        //'backcolor', //背景色
+        'insertorderedlist', //有序列表
+        'insertunorderedlist', //无序列表
+        'fullscreen', //全屏
+        //'directionalityltr', //从左向右输入
+        //'directionalityrtl', //从右向左输入
+        //'rowspacingtop', //段前距
+        //'rowspacingbottom', //段后距
+        //'pagebreak', //分页
+        //'insertframe', //插入Iframe
+        //'imagenone', //默认
+        //'imageleft', //左浮动
+        //'imageright', //右浮动
+        //'attachment', //附件
+        //'imagecenter', //居中
+        //'wordimage', //图片转存
+        //'lineheight', //行间距
+        //'edittip ', //编辑提示
+        //'customstyle', //自定义标题
+        //'autotypeset', //自动排版
+        //'webapp', //百度应用
+        //'touppercase', //字母大写
+        //'tolowercase', //字母小写
+        //'background', //背景
+        //'template', //模板
+        //'scrawl', //涂鸦
+        //'music', //音乐
+        //'inserttable', //插入表格
+        //'drafts', // 从草稿箱加载
+        //'charts', // 图表
+    ]
+]});
+    var ue = UE.getEditor('uptext',{toolbars: [
+    [
+        //'anchor', //锚点
+        'undo', //撤销
+        'redo', //重做
+        'bold', //加粗
+        //'indent', //首行缩进
+        //'snapscreen', //截图
+        //'italic', //斜体
+        //'underline', //下划线
+        //'strikethrough', //删除线
+        //'subscript', //下标
+        //'fontborder', //字符边框
+        //'superscript', //上标
+        //'formatmatch', //格式刷
+        'source', //源代码
+        'blockquote', //引用
+        //'pasteplain', //纯文本粘贴模式
+        //'selectall', //全选
+        //'print', //打印
+        //'preview', //预览
+        'horizontal', //分隔线
+        //'removeformat', //清除格式
+        //'time', //时间
+        //'date', //日期
+        'unlink', //取消链接
+        //'insertrow', //前插入行
+        //'insertcol', //前插入列
+        //'mergeright', //右合并单元格
+        //'mergedown', //下合并单元格
+        //'deleterow', //删除行
+        //'deletecol', //删除列
+        //'splittorows', //拆分成行
+        //'splittocols', //拆分成列
+        //'splittocells', //完全拆分单元格
+        //'deletecaption', //删除表格标题
+        //'inserttitle', //插入标题
+        //'mergecells', //合并多个单元格
+        //'deletetable', //删除表格
+        //'cleardoc', //清空文档
+        //'insertparagraphbeforetable', //"表格前插入行"
+        //'insertcode', //代码语言
+        'fontfamily', //字体
+        'fontsize', //字号
+        //'paragraph', //段落格式
+        //'simpleupload', //单图上传
+        //'insertimage', //多图上传
+        //'edittable', //表格属性
+        //'edittd', //单元格属性
+        'link', //超链接
+        //'emotion', //表情
+        //'spechars', //特殊字符
+        //'searchreplace', //查询替换
+        //'map', //Baidu地图
+        //'gmap', //Google地图
+        //'insertvideo', //视频
+        //'help', //帮助
+        'justifyleft', //居左对齐
+        'justifyright', //居右对齐
+        'justifycenter', //居中对齐
+        //'justifyjustify', //两端对齐
+        'forecolor', //字体颜色
+        //'backcolor', //背景色
+        'insertorderedlist', //有序列表
+        'insertunorderedlist', //无序列表
+        'fullscreen', //全屏
+        //'directionalityltr', //从左向右输入
+        //'directionalityrtl', //从右向左输入
+        //'rowspacingtop', //段前距
+        //'rowspacingbottom', //段后距
+        //'pagebreak', //分页
+        //'insertframe', //插入Iframe
+        //'imagenone', //默认
+        //'imageleft', //左浮动
+        //'imageright', //右浮动
+        //'attachment', //附件
+        //'imagecenter', //居中
+        //'wordimage', //图片转存
+        //'lineheight', //行间距
+        //'edittip ', //编辑提示
+        //'customstyle', //自定义标题
+        //'autotypeset', //自动排版
+        //'webapp', //百度应用
+        //'touppercase', //字母大写
+        //'tolowercase', //字母小写
+        //'background', //背景
+        //'template', //模板
+        //'scrawl', //涂鸦
+        //'music', //音乐
+        //'inserttable', //插入表格
+        //'drafts', // 从草稿箱加载
+        //'charts', // 图表
+    ]
+]});
+
+</script>
+

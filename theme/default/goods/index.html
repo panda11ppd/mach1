@@ -1,0 +1,83 @@
+{include file="public/header" /}
+
+<style type="text/css">
+	small{
+		margin-left: 50px;
+	}
+</style>
+<div class="theme-navbar scrollspy">
+	<div class="container">
+		<h1>{$goods['title']}<small>{$app['app_name']}</small></h1>
+		<ul class="nav">
+			<li class="active">
+				<a href="#info"></a>
+			</li>
+			<li>
+				<a href="#use">使用说明</a>
+			</li>
+			<li>
+				<a href="#fns">功能</a>
+			</li>
+			<li>
+				<a href="#updates">更新</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="container">
+
+	<div class="theme-contentbox">
+
+		<div class="theme-container theme-container-focus" id="info">
+
+			<div class="theme-image">
+				{if condition="$goods.expimg eq ''"}
+                	<img src="__PUBLIC__/static/images/noimg.png">
+                    {else /}
+                    <img src="__PUBLIC__{$goods.expimg}">
+                    {/if}				
+			</div>
+			<div class="theme-focus-action">
+				{if condition="$goods.down_url eq ''"}
+                	<a target="_blank" href="#" class="btn btn-default disabled"  disabled="disabled"><i class="fa">&#xe622;</i> 暂无下载</a>                
+                    {else /}
+                    <a class="btn btn-default" target="_blank" href="{$goods.down_url}"><i class="fa">&#xe622;</i> 软件下载</a>
+                {/if}
+				
+				
+				<!--<span class="btn btn-default btn-theme-demo-qrcode"><i class="fa">&#xe621;</i> 手机演示<span class="theme-demo-qrcode"><span class="theme-demo-qrcode-inner"><img src="http://s.jiathis.com/qrcode.php?url=http://demo.themebetter.com/dux"></span></span>
+				</span>-->
+			</div>
+
+		</div>
+
+		<!--<div class="theme-focuslist">
+			<ul>
+				<li><strong>SEO优化</strong>完美的基础SEO优化、首页关键字和描述自定义、文章关键字和描述的自定义</li>
+				<li><strong>速度优化</strong>图片和头像lazyload按需异步加载提速、JS文件托管、jQuery可选底部加载</li>
+				<li><strong>会员中心</strong>找回密码、登录、注册、找回密码、用户投稿、修改资料、修改密码</li>
+				<li><strong>14+颜色风格</strong>14种可选颜色风格和随意自定义配色</li>
+				<li><strong>5+独立页面</strong>读者墙、链接、存档、标签、网址导航</li>
+				<li><strong>8+小工具</strong>网站统计、置顶文章、特别推荐、广告、文章(超强)、评论、标签云、搜索</li>
+				<li><strong>直达链接</strong>在列表页和文章页都有展示，你可以选择开启、是否新窗口</li>
+				<li><strong>列表无限加载</strong>可以设置无限加载页数和是否开启，列表更有单图展示和无图展示</li>
+				<li><strong>多平台广告</strong>区分手机端和非手机端，可设置不同平台的广告</li>
+			</ul>
+		</div>-->
+
+		<!--help-->
+		{include file="goods/help" /}
+
+		<!--fn-->
+		{include file="goods/fn" /}
+
+		<!--vernew-->
+        {include file="goods/vernew" /}
+	</div>
+
+	{include file="goods/left" /}
+
+</div>
+
+{include file="public/flooter" /}
